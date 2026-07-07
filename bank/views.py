@@ -1,4 +1,10 @@
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import (
+    authenticate,
+    get_user_model,
+    login,
+    logout,
+    update_session_auth_hash,
+)
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -50,6 +56,7 @@ class LoginView(View):
     def post(self, request):
         form = LoginForm(request.POST)
         error = None
+        account_locked = False
         if form.is_valid():
             online_id = form.cleaned_data["online_id"]
             password = form.cleaned_data["password"]
@@ -58,11 +65,29 @@ class LoginView(View):
                 login(request, user)
                 next_url = request.GET.get("next") or request.POST.get("next")
                 return redirect(next_url or "bank:dashboard")
-            error = "We couldn't verify those details. Check your Online ID and password, then try again."
+
+            # authenticate() returns None both for wrong credentials and for
+            # a correct password on a locked (is_active=False) account. Check
+            # separately so locked-out customers get a clear, actionable
+            # message (with a link to support) instead of being told their
+            # password is wrong.
+            User = get_user_model()
+            existing_user = User.objects.filter(username=online_id).first()
+            if (
+                existing_user is not None
+                and not existing_user.is_active
+                and existing_user.check_password(password)
+            ):
+                account_locked = True
+                error = "This account has been locked."
+            else:
+                error = "We couldn't verify those details. Check your Online ID and password, then try again."
         else:
             error = "We couldn't verify those details. Check your Online ID and password, then try again."
         return render(
-            request, self.template_name, {"form": form, "error": error}
+            request,
+            self.template_name,
+            {"form": form, "error": error, "account_locked": account_locked},
         )
 
 

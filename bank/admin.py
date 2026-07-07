@@ -1,6 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.html import format_html
 
 from .models import Account, Profile, Transaction
 
@@ -34,17 +35,62 @@ class UserAdmin(BaseUserAdmin):
         "email",
         "first_name",
         "last_name",
-        "is_active",
+        "account_status",
         "is_staff",
         "date_joined",
         "account_type",
     )
+    # Django's default UserAdmin.list_filter already includes "is_active",
+    # so the sidebar filter for locked/active accounts works out of the box.
     list_select_related = ("profile",)
+    actions = ["lock_accounts", "unlock_accounts"]
 
     def account_type(self, obj):
         return getattr(obj.profile, "get_account_type_display", lambda: "—")()
 
     account_type.short_description = "Account Type"
+
+    def account_status(self, obj):
+        if obj.is_active:
+            return format_html(
+                '<span style="color: #1a7f37;">● Active</span>'
+            )
+        return format_html(
+            '<span style="color: #b91c1c; font-weight: 600;">🔒 Locked</span>'
+        )
+
+    account_status.short_description = "Status"
+    account_status.admin_order_field = "is_active"
+
+    @admin.action(description="Lock selected accounts (prevent sign-in)")
+    def lock_accounts(self, request, queryset):
+        # Never allow an admin to lock their own account or another
+        # superuser's account from a bulk action — avoids accidental lockouts.
+        queryset = queryset.exclude(pk=request.user.pk)
+        locked_superusers = queryset.filter(is_superuser=True).count()
+        queryset = queryset.filter(is_superuser=False)
+        updated = queryset.update(is_active=False)
+        if locked_superusers:
+            self.message_user(
+                request,
+                f"Skipped {locked_superusers} superuser account(s) — "
+                "lock those individually if you're sure.",
+                level=messages.WARNING,
+            )
+        self.message_user(
+            request,
+            f"Locked {updated} account(s). Locked users can no longer sign in.",
+            level=messages.SUCCESS,
+        )
+
+    @admin.action(description="Unlock selected accounts (restore sign-in)")
+    def unlock_accounts(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(
+            request,
+            f"Unlocked {updated} account(s). They can sign in again.",
+            level=messages.SUCCESS,
+        )
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
