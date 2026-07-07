@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Transfer Money | City Prime Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'bank/assets/style.css' %}">
+</head>
+<body>
+
+<!-- ===================== MOBILE TOPBAR ===================== -->
+<div class="mobile-topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <div class="brand">
+    <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg></div>
+    <div class="brand-text"><div class="t1">City Prime</div></div>
+  </div>
+  <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#a259e0,#5b3ea6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">SM</div>
+</div>
+<div class="side-scrim" id="sideScrim"></div>
+
+<div class="app-shell">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <a href="{% url 'bank:index' %}" class="brand">
+      <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg></div>
+      <div class="brand-text"><div class="t1">City Prime</div><div class="t2">Bank</div></div>
+    </a>
+
+    <nav class="side-nav">
+      <a href="{% url 'bank:dashboard' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a href="{% url 'bank:accounts' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 6h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/></svg>
+        Accounts
+      </a>
+      <a href="{% url 'bank:transfer' %}" class="side-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10 3 6l4-4M3 6h13a4 4 0 0 1 4 4v1M17 14l4 4-4 4M21 18H8a4 4 0 0 1-4-4v-1"/></svg>
+        Transfer
+      </a>
+      <a href="{% url 'bank:deposit' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Deposit
+      </a>
+      <a href="{% url 'bank:accounts' %}#cards" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>
+        Cards
+      </a>
+      <a href="{% url 'bank:dashboard' %}#transactions" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 4v5h5M9 13h6M9 17h6"/></svg>
+        Transactions
+      </a>
+
+      <div class="side-label">Support</div>
+      <a href="{% url 'bank:help_center' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+        Help Center
+      </a>
+      <a href="{% url 'bank:settings_page' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.2 2.5a2 2 0 0 1 1.8 1.1l1 2.1 2.3.3a2 2 0 0 1 1.1 3.4l-1.7 1.6.4 2.3a2 2 0 0 1-2.9 2.1L12 14.3l-2.1 1.1a2 2 0 0 1-2.9-2.1l.4-2.3L5.7 9.4a2 2 0 0 1 1.1-3.4l2.3-.3 1-2.1a2 2 0 0 1 1.8-1.1z"/><circle cx="12" cy="12" r="9"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="side-bottom">
+      <div class="side-user">
+        <div class="av">SM</div>
+        <div>
+          <div class="nm">Sarah Morris</div>
+          <div class="em">•••• 4821</div>
+        </div>
+        <a href="{% url 'bank:logout' %}" aria-label="Log out" title="Log out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Transfer Money</h1>
+        <div class="sub">Move money between your accounts or send to someone else</div>
+      </div>
+      <div class="topbar-actions">
+        <a href="{% url 'bank:dashboard' %}" class="btn btn-outline btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <div class="panel form-shell">
+          {% if completed_txn %}
+          <div id="transferSuccess" class="success-view">
+            <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 13 4 4L19 7"/></svg></div>
+            <h3>Transfer Submitted</h3>
+            <p>
+              Sent to {{ completed_txn.display_target }}. Your transfer is
+              <strong>{{ completed_txn.get_status_display }}</strong>.
+              <a href="{% url 'bank:help_center' %}">Contact Support</a> if a transfer dispute occurs.
+            </p>
+            <div class="amt">${{ completed_txn.amount }}</div>
+            <div class="btnrow">
+              <a class="btn btn-outline" href="{% url 'bank:transfer' %}">New Transfer</a>
+              <a class="btn btn-primary" href="{% url 'bank:dashboard' %}">Back to Dashboard</a>
+            </div>
+          </div>
+          {% else %}
+          <form method="post" id="transferForm" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="alert error">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+              <span>{{ form.non_field_errors.0 }}</span>
+            </div>
+            {% endif %}
+
+            <div class="field">
+              <label for="{{ form.from_account.id_for_label }}">From Account</label>
+              {{ form.from_account }}
+              {% if form.from_account.errors %}<div class="alert error"><span>{{ form.from_account.errors.0 }}</span></div>{% endif %}
+            </div>
+
+            <div class="field">
+              <label for="{{ form.to_choice.id_for_label }}">To</label>
+              {{ form.to_choice }}
+              {% if form.to_choice.errors %}<div class="alert error"><span>{{ form.to_choice.errors.0 }}</span></div>{% endif %}
+            </div>
+
+            <div class="field" id="recipientField">
+              <label for="{{ form.recipient_name.id_for_label }}">Recipient Name</label>
+              {{ form.recipient_name }}
+              {% if form.recipient_name.errors %}<div class="alert error"><span>{{ form.recipient_name.errors.0 }}</span></div>{% endif %}
+            </div>
+
+            <div class="field" id="recipientAcctField">
+              <label for="{{ form.recipient_account_number.id_for_label }}">Recipient Account Number (optional)</label>
+              {{ form.recipient_account_number }}
+            </div>
+
+            <div class="field">
+              <label for="{{ form.amount.id_for_label }}">Amount</label>
+              <div class="amt-input-wrap">
+                <span class="cur">$</span>
+                {{ form.amount }}
+              </div>
+              <div class="quick-amt">
+                <button type="button" data-amt="50">$50</button>
+                <button type="button" data-amt="100">$100</button>
+                <button type="button" data-amt="250">$250</button>
+                <button type="button" data-amt="500">$500</button>
+              </div>
+              <div class="avail-note" id="availNote">Available balance: $0.00</div>
+              {% if form.amount.errors %}<div class="alert error"><span>{{ form.amount.errors.0 }}</span></div>{% endif %}
+            </div>
+
+            <div class="field">
+              <label for="{{ form.note.id_for_label }}">Note (optional)</label>
+              {{ form.note }}
+            </div>
+
+            <div class="summary-box">
+              <div class="row"><span>Transfer amount</span><span id="sumAmt">$0.00</span></div>
+              <div class="row"><span>Transfer fee</span><span>$0.00</span></div>
+              <div class="row total"><span>Total</span><span id="sumTotal">$0.00</span></div>
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10 3 6l4-4M3 6h13a4 4 0 0 1 4 4v1M17 14l4 4-4 4M21 18H8a4 4 0 0 1-4-4v-1"/></svg>
+              Transfer Funds
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <div class="panel-head"><h3>Your Balances</h3></div>
+          {% for acct in accounts %}
+          <div class="acct-mini">
+            <div class="dotcolor" style="background:{% if acct.account_type == 'checking' %}var(--blue-500){% else %}var(--green-500){% endif %};"></div>
+            <div><div class="nm">{{ acct.get_account_type_display }}</div><div class="num">#{{ acct.account_number }}</div></div>
+            <div class="amt" data-account-balance="{{ acct.pk }}">${{ acct.balance }}</div>
+          </div>
+          {% empty %}
+          <p style="font-size:13px;color:var(--ink-mist);">No accounts on file yet.</p>
+          {% endfor %}
+        </div>
+        <div class="panel" style="background:rgba(31,191,143,.07); border-color:rgba(31,191,143,.2);">
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--green-500)" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div>
+              <h4 style="font-size:14.5px; margin-bottom:4px;">Transfers are reviewed</h4>
+              <p style="font-size:12.5px; color:var(--ink-mist);">The transfer amount is held from your account as soon as you submit it, and the transfer starts as Pending while our team reviews it — you'll see the status update on your dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 13 4 4L19 7"/></svg>
+  <div class="msg"><strong id="toastTitle">Success</strong><span id="toastBody">Action completed.</span></div>
+</div>
+
+<script>
+  const ACCOUNT_BALANCES = {{ accounts_json|safe }};
+</script>
+<script src="{% static 'bank/assets/app.js' %}"></script>
+<script>
+  CPB.initChrome();
+
+  const toAccountSel = document.getElementById('id_to_choice');
+  const recipientField = document.getElementById('recipientField');
+  const recipientAcctField = document.getElementById('recipientAcctField');
+  const fromAccountSel = document.getElementById('id_from_account');
+  const transferAmount = document.getElementById('id_amount');
+
+  function toggleRecipientField(){
+    const isExternal = toAccountSel && toAccountSel.value === 'external';
+    recipientField.style.display = isExternal ? 'block' : 'none';
+    recipientAcctField.style.display = isExternal ? 'block' : 'none';
+  }
+  if (toAccountSel) {
+    toAccountSel.addEventListener('change', toggleRecipientField);
+    toggleRecipientField();
+  }
+
+  function updateAvailNote(){
+    if (!fromAccountSel) return;
+    const bal = ACCOUNT_BALANCES[fromAccountSel.value] ?? 0;
+    document.getElementById('availNote').textContent = `Available balance: ${CPB.fmt(bal)}`;
+  }
+  if (fromAccountSel) {
+    fromAccountSel.addEventListener('change', updateAvailNote);
+    updateAvailNote();
+  }
+
+  document.querySelectorAll('.quick-amt button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      transferAmount.value = btn.dataset.amt;
+      updateTransferSummary();
+      document.querySelectorAll('.quick-amt button').forEach(b => b.classList.remove('sel'));
+      btn.classList.add('sel');
+    });
+  });
+
+  function updateTransferSummary(){
+    const amt = parseFloat(transferAmount ? transferAmount.value : 0) || 0;
+    document.getElementById('sumAmt').textContent = CPB.fmt(amt);
+    document.getElementById('sumTotal').textContent = CPB.fmt(amt);
+  }
+  if (transferAmount) {
+    transferAmount.addEventListener('input', updateTransferSummary);
+    updateTransferSummary();
+  }
+</script>
+</body>
+</html>

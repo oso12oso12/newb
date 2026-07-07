@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Dashboard | City Prime Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'bank/assets/style.css' %}">
+</head>
+<body>
+
+<!-- ===================== MOBILE TOPBAR ===================== -->
+<div class="mobile-topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <div class="brand">
+    <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg></div>
+    <div class="brand-text"><div class="t1">City Prime</div></div>
+  </div>
+  <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#a259e0,#5b3ea6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">{{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}</div>
+</div>
+<div class="side-scrim" id="sideScrim"></div>
+
+<div class="app-shell">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <a href="{% url 'bank:index' %}" class="brand">
+      <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg></div>
+      <div class="brand-text"><div class="t1">City Prime</div><div class="t2">Bank</div></div>
+    </a>
+
+    <nav class="side-nav">
+      <a href="{% url 'bank:dashboard' %}" class="side-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a href="{% url 'bank:accounts' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 6h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/></svg>
+        Accounts
+      </a>
+      <a href="{% url 'bank:transfer' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10 3 6l4-4M3 6h13a4 4 0 0 1 4 4v1M17 14l4 4-4 4M21 18H8a4 4 0 0 1-4-4v-1"/></svg>
+        Transfer
+      </a>
+      <a href="{% url 'bank:deposit' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Deposit
+      </a>
+      <a href="{% url 'bank:accounts' %}#cards" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>
+        Cards
+      </a>
+      <a href="{% url 'bank:dashboard' %}#transactions" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 4v5h5M9 13h6M9 17h6"/></svg>
+        Transactions
+      </a>
+
+      <div class="side-label">Support</div>
+      <a href="{% url 'bank:help_center' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+        Help Center
+      </a>
+      <a href="{% url 'bank:settings_page' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.2 2.5a2 2 0 0 1 1.8 1.1l1 2.1 2.3.3a2 2 0 0 1 1.1 3.4l-1.7 1.6.4 2.3a2 2 0 0 1-2.9 2.1L12 14.3l-2.1 1.1a2 2 0 0 1-2.9-2.1l.4-2.3L5.7 9.4a2 2 0 0 1 1.1-3.4l2.3-.3 1-2.1a2 2 0 0 1 1.8-1.1z"/><circle cx="12" cy="12" r="9"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="side-bottom">
+      <div class="side-user">
+        <div class="av">{{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}</div>
+        <div>
+          <div class="nm">{{ user.get_full_name|default:user.username }}</div>
+          <div class="em">{{ user.email }}</div>
+        </div>
+        <a href="{% url 'bank:logout' %}" aria-label="Log out" title="Log out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Welcome back, {{ user.first_name|default:user.username }} 👋</h1>
+        <div class="sub" id="dateLine"></div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" aria-label="Search" onclick="CPB.showToast('Search','Search opens here.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+        <button class="icon-btn" aria-label="Notifications" onclick="CPB.showToast('Notifications','You have 2 new alerts.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="dot"></span></button>
+        <a href="{% url 'bank:logout' %}" class="btn btn-outline btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Sign Out
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== Balance cards ===== -->
+    <div class="balance-row">
+      <div class="bal-card primary">
+        <div class="row-top">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="6" width="20" height="13" rx="2.5"/><path d="M2 10h20"/></svg></div>
+          <a href="{% url 'bank:accounts' %}" class="kebab" aria-label="View account"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></a>
+        </div>
+        <div class="label">Primary Checking</div>
+        <div class="amount">${{ checking_account.balance|default:"0.00" }}</div>
+        <div class="acct-no">{% if checking_account %}Account #{{ checking_account.account_number }}{% else %}No account on file{% endif %}</div>
+        <div class="trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 15 7-7 7 7"/></svg>Available balance</div>
+      </div>
+
+      <div class="bal-card">
+        <div class="row-top">
+          <div class="ic" style="background:rgba(31,191,143,.18);"><svg viewBox="0 0 24 24" fill="none" stroke="#5be0b9" stroke-width="2"><path d="M3 17V9l7-4 7 4v8M3 17h14M3 17l-2 4h18l-2-4"/></svg></div>
+          <a href="{% url 'bank:accounts' %}" class="kebab" aria-label="View account"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></a>
+        </div>
+        <div class="label">Savings Account</div>
+        <div class="amount">${{ savings_account.balance|default:"0.00" }}</div>
+        <div class="acct-no">{% if savings_account %}Account #{{ savings_account.account_number }}{% else %}No account on file{% endif %}</div>
+        <div class="trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 15 7-7 7 7"/></svg>Available balance</div>
+      </div>
+
+    </div>
+
+    <!-- ===== Quick actions ===== -->
+    <div class="section-title"><h2>Quick Actions</h2></div>
+    <div class="quick-actions">
+      <a class="qa-card" href="{% url 'bank:transfer' %}">
+        <div class="ic ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 10 3 6l4-4M3 6h13a4 4 0 0 1 4 4v1M17 14l4 4-4 4M21 18H8a4 4 0 0 1-4-4v-1"/></svg></div>
+        <span>Transfer</span>
+      </a>
+      <a class="qa-card" href="{% url 'bank:deposit' %}">
+        <div class="ic ic-green"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 3v13m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
+        <span>Deposit</span>
+      </a>
+      <a class="qa-card" href="{% url 'bank:accounts' %}">
+        <div class="ic ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 10h18M5 6h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/></svg></div>
+        <span>Accounts</span>
+      </a>
+      <a class="qa-card" href="{% url 'bank:help_center' %}">
+        <div class="ic ic-pink"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 19v3"/></svg></div>
+        <span>Support</span>
+      </a>
+    </div>
+
+    <!-- ===== Content grid ===== -->
+    <div class="content-grid">
+      <!-- LEFT column -->
+      <div>
+        <div class="panel" id="transactions">
+          <div class="panel-head">
+            <h3>Recent Transactions</h3>
+            <div class="filter-pills">
+              <button class="active" data-filter="all">All</button>
+              <button data-filter="in">Income</button>
+              <button data-filter="out">Spending</button>
+            </div>
+          </div>
+          <div class="tx-list" id="txList">
+            {% for txn in transactions %}
+            <div class="tx-row" data-filter-type="{% if txn.from_account_id == checking_account.id or txn.from_account_id == savings_account.id %}out{% else %}in{% endif %}">
+              <div class="tx-ic" style="background:#0f6fb8"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 10 3 6l4-4M3 6h13a4 4 0 0 1 4 4v1M17 14l4 4-4 4M21 18H8a4 4 0 0 1-4-4v-1"/></svg></div>
+              <div class="tx-info">
+                <div class="nm">Transfer to {{ txn.display_target }}</div>
+                <div class="meta">
+                  {{ txn.get_transfer_type_display }} • {{ txn.created_at|date:"M j" }}
+                  <span class="status-pill status-{{ txn.status }}">{{ txn.get_status_display }}</span>
+                </div>
+              </div>
+              <div class="tx-amt neg">-${{ txn.amount }}</div>
+            </div>
+            {% empty %}
+            <div class="empty-state">No transactions to show.</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Spending Overview</h3>
+            <span style="font-size:12.5px; color:var(--ink-mist);">Last 7 days</span>
+          </div>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT column -->
+      <div>
+        <div class="panel">
+          <h3 style="margin-bottom:16px;">Your Card</h3>
+          <div class="mini-card">
+            <div class="row-top">
+              <div class="chip"></div>
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.6"><circle cx="9" cy="12" r="6" fill="rgba(255,255,255,.25)" stroke="none"/><circle cx="15" cy="12" r="6" fill="rgba(255,255,255,.4)" stroke="none"/></svg>
+            </div>
+            <div class="num">•••• •••• •••• 4821</div>
+            <div class="foot">
+              <div><div style="margin-bottom:3px;">Card Holder</div><div class="nm">Sarah Morris</div></div>
+              <div><div style="margin-bottom:3px;">Expires</div><div class="nm">09/29</div></div>
+            </div>
+          </div>
+          <button class="btn btn-outline btn-block btn-sm" onclick="CPB.showToast('Card Settings','Card management opens here.')">Manage Card Settings</button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Your Accounts</h3><a href="{% url 'bank:accounts' %}" style="font-size:13px;color:#6fc4f0;font-weight:600;">View all</a></div>
+          <div class="acct-mini">
+            <div class="dotcolor" style="background:var(--blue-500);"></div>
+            <div><div class="nm">Primary Checking</div><div class="num">{% if checking_account %}#{{ checking_account.account_number }}{% else %}Not opened{% endif %}</div></div>
+            <div class="amt">${{ checking_account.balance|default:"0.00" }}</div>
+          </div>
+          <div class="acct-mini">
+            <div class="dotcolor" style="background:var(--green-500);"></div>
+            <div><div class="nm">Savings Account</div><div class="num">{% if savings_account %}#{{ savings_account.account_number }}{% else %}Not opened{% endif %}</div></div>
+            <div class="amt">${{ savings_account.balance|default:"0.00" }}</div>
+          </div>
+        </div>
+
+        <div class="panel" style="background:rgba(31,191,143,.07); border-color:rgba(31,191,143,.2);">
+          <div style="display:flex; gap:12px; align-items:flex-start;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--green-500)" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div>
+              <h4 style="font-size:14.5px; margin-bottom:4px;">Your account is protected</h4>
+              <p style="font-size:12.5px; color:var(--ink-mist);">256-bit encryption and FDIC insurance keep your funds secure at all times.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 13 4 4L19 7"/></svg>
+  <div class="msg"><strong id="toastTitle">Success</strong><span id="toastBody">Action completed.</span></div>
+</div>
+
+<script src="{% static 'bank/assets/app.js' %}"></script>
+<script>
+  document.getElementById('dateLine').textContent = new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  CPB.initChrome();
+
+  // Transaction rows are rendered server-side from real Transaction records;
+  // filtering here just shows/hides those existing rows.
+  function renderTransactions(){
+    document.querySelectorAll('#txList .tx-row').forEach(row => {
+      const type = row.dataset.filterType;
+      const show = currentFilter === 'all' || currentFilter === type;
+      row.style.display = show ? '' : 'none';
+    });
+  }
+  let currentFilter = 'all';
+
+  function renderChart(){
+    const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const vals = [40, 65, 30, 80, 55, 95, 70];
+    const max = Math.max(...vals);
+    document.getElementById('chartBars').innerHTML = days.map((d,i) => `
+      <div class="bar-col"><div class="bar" style="height:${(vals[i]/max*100).toFixed(0)}%"></div><span>${d}</span></div>
+    `).join('');
+  }
+
+  document.querySelectorAll('.filter-pills button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-pills button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderTransactions();
+    });
+  });
+
+  renderTransactions();
+  renderChart();
+</script>
+</body>
+</html>

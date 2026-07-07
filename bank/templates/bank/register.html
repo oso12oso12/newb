@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open an Account | City Prime Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0b1220;
+    --navy-900:#0e1729;
+    --navy-800:#141f33;
+    --navy-700:#1b2942;
+    --slate-card:#232c40;
+    --slate-line:rgba(255,255,255,.09);
+    --blue-500:#0f8fdc;
+    --blue-600:#0384c8;
+    --green-500:#1fbf8f;
+    --purple-500:#a259e0;
+    --orange-500:#f4762b;
+    --red-500:#ef4444;
+    --ink-white:#ffffff;
+    --ink-fog:#c7d1e0;
+    --ink-mist:#8b96ab;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --shadow-soft: 0 20px 45px rgba(4,10,25,0.35);
+    --maxw:1240px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--navy-900);
+    color:var(--ink-white);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+  h1,h2,h3,h4{font-family:'Poppins',sans-serif; font-weight:700; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 32px;}
+  button{font-family:inherit; cursor:pointer;}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:15px 28px; border-radius:12px; font-weight:600; font-size:15.5px;
+    border:1.5px solid transparent; transition:.2s ease; white-space:nowrap;
+  }
+  .btn svg{width:18px; height:18px; flex-shrink:0;}
+  .btn-primary{background:var(--blue-600); color:#fff; box-shadow:0 10px 25px rgba(3,132,200,.35);}
+  .btn-primary:hover{background:var(--blue-500); transform:translateY(-2px);}
+  .btn-primary:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+  .btn-outline{background:rgba(255,255,255,.05); color:#fff; border-color:rgba(255,255,255,.35);}
+  .btn-outline:hover{background:rgba(255,255,255,.12); border-color:#fff;}
+  .btn-block{width:100%;}
+  .btn-sm{padding:9px 16px; font-size:13px; border-radius:9px;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:200;
+    background:linear-gradient(180deg,var(--navy-900) 0%, #0d1626 100%);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; height:78px;}
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-icon{
+    width:42px; height:42px; border-radius:11px;
+    background:linear-gradient(135deg,#39c1ff,#0f6fb8);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(15,143,220,.4);
+  }
+  .brand-icon svg{width:24px; height:24px;}
+  .brand-text .t1{font-family:'Poppins',sans-serif; font-weight:700; font-size:19px; line-height:1.1; color:#fff;}
+  .brand-text .t2{font-family:'Poppins',sans-serif; font-weight:400; font-size:13px; color:var(--ink-fog); letter-spacing:.06em;}
+  .nav-links{display:flex; align-items:center; gap:34px;}
+  .nav-links a{font-size:14.5px; font-weight:500; color:var(--ink-fog); transition:.2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-actions{display:flex; align-items:center; gap:14px;}
+  .nav-actions .btn{padding:12px 22px; font-size:14px;}
+  .hamburger{
+    display:none; width:44px; height:44px; border-radius:11px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+    align-items:center; justify-content:center; flex-direction:column; gap:5px;
+  }
+  .hamburger span{display:block; width:20px; height:2px; background:#fff; border-radius:2px; transition:.3s;}
+  .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.active span:nth-child(2){opacity:0;}
+  .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-drawer{
+    position:fixed; top:0; right:-100%; width:82%; max-width:340px; height:100vh;
+    background:var(--navy-800); z-index:300; padding:28px 26px;
+    box-shadow:-20px 0 50px rgba(0,0,0,.5); transition:right .35s ease;
+    display:flex; flex-direction:column; gap:6px; overflow-y:auto;
+  }
+  .mobile-drawer.open{right:0;}
+  .drawer-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:26px;}
+  .drawer-close{width:38px; height:38px; border-radius:10px; background:rgba(255,255,255,.08); border:none; color:#fff; display:flex; align-items:center; justify-content:center;}
+  .drawer-link{padding:15px 6px; font-size:16px; font-weight:500; color:var(--ink-fog); border-bottom:1px solid rgba(255,255,255,.07);}
+  .drawer-actions{margin-top:22px; display:flex; flex-direction:column; gap:12px;}
+  .scrim{position:fixed; inset:0; background:rgba(4,8,18,.6); z-index:250; opacity:0; pointer-events:none; transition:opacity .3s;}
+  .scrim.show{opacity:1; pointer-events:auto;}
+
+  /* ---------- Page shell ---------- */
+  main{flex:1; padding:56px 0 90px;}
+  .page-head{max-width:640px; margin:0 auto 40px; text-align:center;}
+  .page-head .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(15,143,220,.15); border:1px solid rgba(15,143,220,.3); color:#4fbcf5;
+    padding:8px 18px; border-radius:30px; font-size:13px; font-weight:600; margin-bottom:18px;
+  }
+  .page-head .eyebrow svg{width:15px; height:15px;}
+  .page-head h1{font-size:34px; margin-bottom:12px;}
+  .page-head p{color:var(--ink-fog); font-size:15.5px;}
+
+  .form-shell{max-width:780px; margin:0 auto; background:var(--slate-card); border:1px solid rgba(255,255,255,.07); border-radius:var(--radius-lg); padding:44px 48px; box-shadow:var(--shadow-soft);}
+
+  /* Stepper */
+  .stepper{display:flex; align-items:center; margin-bottom:44px;}
+  .step{display:flex; flex-direction:column; align-items:center; gap:8px; flex:1; position:relative;}
+  .step .circle{
+    width:38px; height:38px; border-radius:50%; background:var(--navy-700); border:2px solid var(--slate-line);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--ink-mist);
+    transition:.25s; z-index:2;
+  }
+  .step .label{font-size:12px; color:var(--ink-mist); font-weight:600; text-align:center;}
+  .step.done .circle{background:var(--green-500); border-color:var(--green-500); color:#08281f;}
+  .step.active .circle{background:var(--blue-600); border-color:var(--blue-600); color:#fff;}
+  .step.active .label, .step.done .label{color:#fff;}
+  .step-line{position:absolute; top:19px; left:50%; width:100%; height:2px; background:var(--slate-line); z-index:1;}
+  .step:last-child .step-line{display:none;}
+  .step.done .step-line{background:var(--green-500);}
+
+  .form-step{display:none;}
+  .form-step.active{display:block; animation:fadein .35s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+  .step-title{font-size:21px; margin-bottom:6px;}
+  .step-sub{color:var(--ink-mist); font-size:14px; margin-bottom:28px;}
+
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .field{margin-bottom:20px;}
+  .field label{display:block; font-size:13.5px; font-weight:600; color:var(--ink-fog); margin-bottom:8px;}
+  .hint{font-size:12px; color:var(--ink-mist); margin-top:6px;}
+  .field input, .field select{
+    width:100%; padding:13px 15px; border-radius:11px; font-size:14.5px;
+    background:var(--navy-700); border:1.5px solid var(--slate-line); color:#fff;
+    transition:.2s;
+  }
+  .field input:focus, .field select:focus{outline:none; border-color:var(--blue-500);}
+  .field input::placeholder{color:#5c6883;}
+  .field select{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b96ab' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; background-size:18px;}
+
+  /* account type cards */
+  .acct-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:26px;}
+  .acct-card{
+    background:var(--navy-700); border:2px solid var(--slate-line); border-radius:14px;
+    padding:22px 18px; text-align:center; cursor:pointer; transition:.2s;
+  }
+  .acct-card:hover{border-color:rgba(15,143,220,.4);}
+  .acct-card.selected{border-color:var(--blue-500); background:rgba(15,143,220,.1);}
+  .acct-card .ic{width:44px; height:44px; border-radius:12px; background:rgba(15,143,220,.15); display:flex; align-items:center; justify-content:center; margin:0 auto 12px;}
+  .acct-card .ic svg{width:22px; height:22px; color:#4fbcf5;}
+  .acct-card h4{font-size:15px; margin-bottom:4px;}
+  .acct-card p{font-size:12px; color:var(--ink-mist);}
+
+  .deposit-input{position:relative; max-width:260px;}
+  .deposit-input span{position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--ink-mist); font-weight:600;}
+  .deposit-input input{padding-left:32px;}
+
+  .toggle-eye{position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--ink-mist); display:flex; padding:4px;}
+  .input-wrap{position:relative;}
+  .input-wrap input{padding-right:44px;}
+  .toggle-eye svg{width:18px; height:18px;}
+
+  .pw-meter{height:5px; border-radius:4px; background:var(--slate-line); margin-top:10px; overflow:hidden;}
+  .pw-meter-fill{height:100%; width:0%; border-radius:4px; transition:.3s; background:var(--red-500);}
+  .pw-meter-label{font-size:12px; color:var(--ink-mist); margin-top:6px;}
+
+  .check-row{display:flex; gap:12px; align-items:flex-start; margin-bottom:16px; font-size:13.5px; color:var(--ink-fog);}
+  .check-row input{width:18px; height:18px; margin-top:2px; accent-color:var(--blue-600); flex-shrink:0;}
+  .check-row a{color:#6fc4f0;}
+
+  .review-block{background:var(--navy-700); border:1px solid var(--slate-line); border-radius:14px; padding:22px 24px; margin-bottom:26px;}
+  .review-row{display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.06); font-size:14px;}
+  .review-row:last-child{border-bottom:none;}
+  .review-row .k{color:var(--ink-mist);}
+  .review-row .v{font-weight:600;}
+
+  .step-actions{display:flex; justify-content:space-between; gap:16px; margin-top:36px;}
+  .step-actions .btn{min-width:140px;}
+  .step-actions.single{justify-content:flex-end;}
+
+  .alert{
+    display:flex; gap:10px; align-items:flex-start; background:rgba(239,68,68,.1);
+    border:1px solid rgba(239,68,68,.3); color:#fca5a5; padding:14px 16px;
+    border-radius:11px; font-size:13.5px; margin-bottom:22px;
+  }
+  .alert svg{width:18px; height:18px; flex-shrink:0; margin-top:1px;}
+  .hidden{display:none !important;}
+
+  /* success panel */
+  .success-panel{text-align:center; padding:20px 10px;}
+  .success-icon{
+    width:78px; height:78px; border-radius:50%; background:rgba(31,191,143,.15); border:2px solid var(--green-500);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 26px;
+  }
+  .success-icon svg{width:36px; height:36px; color:var(--green-500);}
+  .success-panel h2{font-size:26px; margin-bottom:12px;}
+  .success-panel p{color:var(--ink-fog); font-size:15px; max-width:440px; margin:0 auto 30px;}
+  .success-meta{background:var(--navy-700); border-radius:14px; padding:20px 24px; max-width:400px; margin:0 auto 30px; text-align:left;}
+
+  /* footer */
+  footer{background:var(--navy-950); padding:34px 0; border-top:1px solid rgba(255,255,255,.06);}
+  .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .foot-row .copy{font-size:13px; color:var(--ink-mist);}
+  .badges{display:flex; gap:18px; font-size:12.5px; color:var(--ink-mist);}
+  .badges span{display:inline-flex; align-items:center; gap:6px;}
+  .badges svg{width:15px; height:15px;}
+  .legal-links{display:flex; gap:20px;}
+  .legal-links a{font-size:12.5px; color:var(--ink-mist);}
+  .legal-links a:hover{color:#fff;}
+
+  @media (max-width:900px){
+    .nav-links, .nav-actions{display:none;}
+    .hamburger{display:flex;}
+    .form-shell{padding:32px 22px;}
+    .grid-2{grid-template-columns:1fr;}
+    .acct-grid{grid-template-columns:1fr;}
+    .step .label{display:none;}
+  }
+  @media (max-width:480px){
+    .wrap{padding:0 20px;}
+    .page-head h1{font-size:26px;}
+    .form-shell{border-radius:16px;}
+    .step-actions{flex-direction:column-reverse;}
+    .step-actions .btn{width:100%; min-width:0;}
+    .foot-row{flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="wrap nav">
+    <a href="{% url 'bank:index' %}" class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg>
+      </div>
+      <div class="brand-text">
+        <div class="t1">City Prime</div>
+        <div class="t2">Bank</div>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="{% url 'bank:index' %}">Home</a>
+      <a href="{% url 'bank:index' %}#services">Services</a>
+      <a href="{% url 'bank:index' %}#rates">Rates</a>
+      <a href="{% url 'bank:index' %}#about">About</a>
+      <a href="{% url 'bank:index' %}#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="{% url 'bank:login' %}" class="btn btn-outline btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        Login
+      </a>
+      <a href="{% url 'bank:register' %}" class="btn btn-primary btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+        Register
+      </a>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<aside class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-top">
+    <div class="brand">
+      <div class="brand-icon" style="width:36px;height:36px;">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg>
+      </div>
+      <div class="brand-text"><div class="t1" style="font-size:16px;">City Prime</div></div>
+    </div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <a class="drawer-link" href="{% url 'bank:index' %}">Home</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#services">Services</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#rates">Rates</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#about">About</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#contact">Contact</a>
+  <div class="drawer-actions">
+    <a href="{% url 'bank:login' %}" class="btn btn-outline btn-block">Login</a>
+    <a href="{% url 'bank:register' %}" class="btn btn-primary btn-block">Register</a>
+  </div>
+</aside>
+
+<!-- ===================== MAIN ===================== -->
+<main>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+        Open an Account
+      </div>
+      <h1>Start Building Your Financial Strength</h1>
+      <p>It takes about 5 minutes. No minimum balance, no hidden fees, and $200 when you open a new account today.</p>
+    </div>
+
+    <div class="form-shell">
+      <!-- Stepper -->
+      <div class="stepper" id="stepper">
+        <div class="step active" data-step="1"><div class="circle">1</div><div class="label">Personal Info</div><div class="step-line"></div></div>
+        <div class="step" data-step="2"><div class="circle">2</div><div class="label">Address</div><div class="step-line"></div></div>
+        <div class="step" data-step="3"><div class="circle">3</div><div class="label">Account</div><div class="step-line"></div></div>
+        <div class="step" data-step="4"><div class="circle">4</div><div class="label">Security</div><div class="step-line"></div></div>
+        <div class="step" data-step="5"><div class="circle">5</div><div class="label">Review</div><div class="step-line"></div></div>
+      </div>
+
+      <form id="regForm" method="post" action="{% url 'bank:register' %}" novalidate>
+        {% csrf_token %}
+        <!-- STEP 1: Personal Info -->
+        <div class="form-step active" data-step="1">
+          <h3 class="step-title">Personal Information</h3>
+          <p class="step-sub">Tell us a bit about yourself. This must match your government ID.</p>
+
+          {% if form.errors %}
+            <div class="alert" style="position:static; margin-bottom:20px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              <div>
+                <strong>Please fix the following:</strong>
+                <ul style="margin:8px 0 0 18px; padding:0;">
+                  {% for field in form %}
+                    {% for error in field.errors %}
+                      <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                  {% endfor %}
+                  {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="firstName">Legal First Name</label>
+              <input type="text" id="firstName" name="first_name" placeholder="Jordan" value="{{ form.first_name.value|default:'' }}" required>
+            </div>
+            <div class="field">
+              <label for="lastName">Legal Last Name</label>
+              <input type="text" id="lastName" name="last_name" placeholder="Whitfield" value="{{ form.last_name.value|default:'' }}" required>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="dob">Date of Birth</label>
+              <input type="date" id="dob" name="dob" value="{{ form.dob.value|default:'' }}" required>
+            </div>
+            <div class="field">
+              <label for="ssn">Social Security Number</label>
+              <input type="text" id="ssn" name="ssn" placeholder="XXX-XX-XXXX" maxlength="11" value="{{ form.ssn.value|default:'' }}" required>
+              <div class="hint">Encrypted end-to-end. Required to open a U.S. bank account.</div>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="you@email.com" value="{{ form.email.value|default:'' }}" required>
+            </div>
+            <div class="field">
+              <label for="phone">Mobile Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" value="{{ form.phone.value|default:'' }}" required>
+            </div>
+          </div>
+
+          <div class="step-actions single">
+            <button type="button" class="btn btn-primary next-btn" data-next="2">
+              Continue
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Address -->
+        <div class="form-step" data-step="2">
+          <h3 class="step-title">Home Address</h3>
+          <p class="step-sub">We'll use this as your primary mailing address for statements and cards.</p>
+
+          <div class="field">
+            <label for="street">Street Address</label>
+            <input type="text" id="street" name="street" placeholder="123 Banking Street" value="{{ form.street.value|default:'' }}" required>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="apt">Apt / Unit (optional)</label>
+              <input type="text" id="apt" name="apt" placeholder="Apt 4B" value="{{ form.apt.value|default:'' }}">
+            </div>
+            <div class="field">
+              <label for="city">City</label>
+              <input type="text" id="city" name="city" placeholder="New York" value="{{ form.city.value|default:'' }}" required>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="state">State</label>
+              <select id="state" name="state" required>
+                <option value="">Select state</option>
+                <option {% if form.state.value == "New York" %}selected{% endif %}>New York</option>
+                <option {% if form.state.value == "California" %}selected{% endif %}>California</option>
+                <option {% if form.state.value == "Texas" %}selected{% endif %}>Texas</option>
+                <option {% if form.state.value == "Florida" %}selected{% endif %}>Florida</option>
+                <option {% if form.state.value == "Illinois" %}selected{% endif %}>Illinois</option>
+                <option {% if form.state.value == "Pennsylvania" %}selected{% endif %}>Pennsylvania</option>
+                <option {% if form.state.value == "Ohio" %}selected{% endif %}>Ohio</option>
+                <option {% if form.state.value == "Georgia" %}selected{% endif %}>Georgia</option>
+                <option {% if form.state.value == "New Jersey" %}selected{% endif %}>New Jersey</option>
+                <option {% if form.state.value == "North Carolina" %}selected{% endif %}>North Carolina</option>
+                <option {% if form.state.value == "Other" %}selected{% endif %}>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="zip">ZIP Code</label>
+              <input type="text" id="zip" name="zip_code" placeholder="10001" maxlength="5" value="{{ form.zip_code.value|default:'' }}" required>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-outline prev-btn" data-prev="1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+            <button type="button" class="btn btn-primary next-btn" data-next="3">
+              Continue
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Account Type -->
+        <div class="form-step" data-step="3">
+          <h3 class="step-title">Choose Your Account</h3>
+          <p class="step-sub">Select the account that fits your goals. You can add more later.</p>
+
+          <input type="hidden" id="account_type" name="account_type" value="{{ form.account_type.value|default:'checking' }}">
+          <div class="acct-grid" id="acctGrid">
+            <div class="acct-card {% if not form.account_type.value or form.account_type.value == 'checking' %}selected{% endif %}" data-acct="checking">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+              <h4>Checking</h4>
+              <p>No minimum balance, free debit card</p>
+            </div>
+            <div class="acct-card {% if form.account_type.value == 'savings' %}selected{% endif %}" data-acct="savings">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 5c-1.5-1.5-4-2-6-2C8.5 3 5 6 5 10c0 2 1 3.5 2 5l-1 3h4l1-2c1 .3 2 .3 3 0l1 2h4l-1-3c1-1.3 2-3 2-5 0-1.5-.5-3-2-5z"/></svg></div>
+              <h4>High Yield Savings</h4>
+              <p>3.75% APY, grow your balance</p>
+            </div>
+            <div class="acct-card {% if form.account_type.value == 'both' %}selected{% endif %}" data-acct="both">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg></div>
+              <h4>Both</h4>
+              <p>Checking + Savings bundle</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="deposit">Initial Deposit</label>
+            <div class="deposit-input">
+              <span>$</span>
+              <input type="number" id="deposit" name="deposit" placeholder="100" min="0" value="{{ form.deposit.value|default:'' }}">
+            </div>
+            <div class="hint">Optional — you can fund your account after opening it.</div>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-outline prev-btn" data-prev="2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+            <button type="button" class="btn btn-primary next-btn" data-next="4">
+              Continue
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Security -->
+        <div class="form-step" data-step="4">
+          <h3 class="step-title">Secure Your Account</h3>
+          <p class="step-sub">Create your Online ID and password to manage your account digitally.</p>
+
+          <div class="field">
+            <label for="username">Create Online ID</label>
+            <input type="text" id="username" name="username" placeholder="e.g. jwhitfield24" value="{{ form.username.value|default:'' }}" required>
+          </div>
+          <div class="field">
+            <label for="newPw">Create Password</label>
+            <div class="input-wrap">
+              <input type="password" id="newPw" name="password" placeholder="At least 10 characters" required>
+              <button type="button" class="toggle-eye" data-target="newPw">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pw-meter"><div class="pw-meter-fill" id="pwFill"></div></div>
+            <div class="pw-meter-label" id="pwLabel">Use 10+ characters with numbers &amp; symbols</div>
+          </div>
+          <div class="field">
+            <label for="confirmPw">Confirm Password</label>
+            <div class="input-wrap">
+              <input type="password" id="confirmPw" name="confirm_password" placeholder="Re-enter password" required>
+              <button type="button" class="toggle-eye" data-target="confirmPw">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="secQ">Security Question</label>
+            <select id="secQ" name="security_question">
+              <option {% if form.security_question.value == "What was your first pet's name?" %}selected{% endif %}>What was your first pet's name?</option>
+              <option {% if form.security_question.value == "What city were you born in?" %}selected{% endif %}>What city were you born in?</option>
+              <option {% if form.security_question.value == "What was your childhood nickname?" %}selected{% endif %}>What was your childhood nickname?</option>
+              <option {% if form.security_question.value == "What is your mother's maiden name?" %}selected{% endif %}>What is your mother's maiden name?</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="secA">Answer</label>
+            <input type="text" id="secA" name="security_answer" placeholder="Your answer" value="{{ form.security_answer.value|default:'' }}">
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-outline prev-btn" data-prev="3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+            <button type="button" class="btn btn-primary next-btn" data-next="5">
+              Continue
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 5: Review -->
+        <div class="form-step" data-step="5">
+          <h3 class="step-title">Review &amp; Submit</h3>
+          <p class="step-sub">Please confirm your details before submitting your application.</p>
+
+          <div class="review-block" id="reviewBlock">
+            <div class="review-row"><span class="k">Name</span><span class="v" id="rvName">—</span></div>
+            <div class="review-row"><span class="k">Email</span><span class="v" id="rvEmail">—</span></div>
+            <div class="review-row"><span class="k">Phone</span><span class="v" id="rvPhone">—</span></div>
+            <div class="review-row"><span class="k">Address</span><span class="v" id="rvAddress">—</span></div>
+            <div class="review-row"><span class="k">Account Type</span><span class="v" id="rvAcct">Checking</span></div>
+            <div class="review-row"><span class="k">Initial Deposit</span><span class="v" id="rvDeposit">$0</span></div>
+            <div class="review-row"><span class="k">Online ID</span><span class="v" id="rvUsername">—</span></div>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="agreeTerms" name="agree_terms" required>
+            <label for="agreeTerms">I agree to the <a href="#">Terms of Service</a>, <a href="#">Privacy Policy</a>, and consent to receive account documents electronically (E-Sign).</label>
+          </div>
+          <div class="check-row">
+            <input type="checkbox" id="agreePatriot" name="agree_patriot" required>
+            <label for="agreePatriot">I certify that the information provided is accurate, as required under the USA PATRIOT Act for identity verification.</label>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-outline prev-btn" data-prev="4">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+              Submit Application
+            </button>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="form-step" data-step="success">
+          <div class="success-panel">
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <h2>Application Submitted!</h2>
+            <p>Welcome to City Prime Bank. Your application is being reviewed and you'll receive a confirmation email shortly with your account details.</p>
+            <div class="success-meta">
+              <div class="review-row"><span class="k">Reference ID</span><span class="v" id="refId">CP-000000</span></div>
+              <div class="review-row"><span class="k">Status</span><span class="v" style="color:var(--green-500);">Pending Review</span></div>
+            </div>
+            <a href="{% url 'bank:login' %}" class="btn btn-primary">
+              Go to Sign On
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap foot-row">
+    <div class="copy">© 2025 City Prime Bank. All rights reserved. Member FDIC. Equal Housing Lender.</div>
+    <div class="badges">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#1fbf8f" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>FDIC Insured</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#8b96ab" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>256-bit SSL</span>
+    </div>
+    <div class="legal-links">
+      <a href="#">Privacy</a>
+      <a href="#">Security</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile drawer
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const drawer = document.getElementById('mobileDrawer');
+  const scrim = document.getElementById('scrim');
+  const drawerClose = document.getElementById('drawerClose');
+  function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('show'); hamburgerBtn.classList.add('active'); document.body.style.overflow='hidden'; }
+  function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); hamburgerBtn.classList.remove('active'); document.body.style.overflow=''; }
+  hamburgerBtn.addEventListener('click', () => drawer.classList.contains('open') ? closeDrawer() : openDrawer());
+  drawerClose.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+
+  // Stepper logic
+  const steps = document.querySelectorAll('.form-step');
+  const stepDots = document.querySelectorAll('#stepper .step');
+  let currentStep = 1;
+
+  function goToStep(n){
+    steps.forEach(s => s.classList.toggle('active', s.dataset.step == n));
+    stepDots.forEach(d => {
+      const ds = parseInt(d.dataset.step);
+      d.classList.remove('active','done');
+      if(ds < n) d.classList.add('done');
+      if(ds == n) d.classList.add('active');
+    });
+    currentStep = n;
+    window.scrollTo({top: document.querySelector('.form-shell').offsetTop - 20, behavior:'smooth'});
+  }
+
+  function validateStep(n){
+    const stepEl = document.querySelector(`.form-step[data-step="${n}"]`);
+    if(!stepEl) return true;
+    const required = stepEl.querySelectorAll('[required]');
+    for(const el of required){
+      if(!el.value || (el.type==='checkbox' && !el.checked)){
+        el.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  document.querySelectorAll('.next-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(!validateStep(currentStep)) return;
+      goToStep(parseInt(btn.dataset.next));
+    });
+  });
+  document.querySelectorAll('.prev-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> goToStep(parseInt(btn.dataset.prev)));
+  });
+
+  // Account type selection
+  const accountTypeInput = document.getElementById('account_type');
+  document.querySelectorAll('.acct-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      document.querySelectorAll('.acct-card').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      accountTypeInput.value = card.dataset.acct;
+    });
+  });
+
+  // Password toggles
+  document.querySelectorAll('.toggle-eye').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = document.getElementById(btn.dataset.target);
+      target.type = target.type === 'password' ? 'text' : 'password';
+    });
+  });
+
+  // Password strength meter
+  const pwInput = document.getElementById('newPw');
+  const pwFill = document.getElementById('pwFill');
+  const pwLabel = document.getElementById('pwLabel');
+  pwInput.addEventListener('input', ()=>{
+    const v = pwInput.value;
+    let score = 0;
+    if(v.length >= 10) score++;
+    if(/[A-Z]/.test(v)) score++;
+    if(/[0-9]/.test(v)) score++;
+    if(/[^A-Za-z0-9]/.test(v)) score++;
+    const pct = (score/4)*100;
+    pwFill.style.width = pct + '%';
+    const colors = ['#ef4444','#ef4444','#f4762b','#f4762b','#1fbf8f'];
+    pwFill.style.background = colors[score];
+    const labels = ['Very weak','Weak','Fair','Good','Strong'];
+    pwLabel.textContent = v ? labels[score] : 'Use 10+ characters with numbers & symbols';
+  });
+
+  // SSN auto-format
+  document.getElementById('ssn').addEventListener('input', (e)=>{
+    let v = e.target.value.replace(/\D/g,'').slice(0,9);
+    if(v.length > 5) v = v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5);
+    else if(v.length > 3) v = v.slice(0,3)+'-'+v.slice(3);
+    e.target.value = v;
+  });
+
+  // Client-side validation only — the real submission is a normal POST to Django,
+  // which creates the account and redirects to Sign On.
+  const form = document.getElementById('regForm');
+  form.addEventListener('submit', (e)=>{
+    if(!validateStep(5)){
+      e.preventDefault();
+    }
+    // otherwise let the browser submit the form normally
+  });
+
+  // live-update review on step 5 entry too
+  document.querySelector('[data-next="5"]').addEventListener('click', ()=>{
+    document.getElementById('rvName').textContent = `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`;
+    document.getElementById('rvEmail').textContent = document.getElementById('email').value;
+    document.getElementById('rvPhone').textContent = document.getElementById('phone').value;
+    document.getElementById('rvAddress').textContent = `${document.getElementById('street').value}, ${document.getElementById('city').value}, ${document.getElementById('state').value} ${document.getElementById('zip').value}`;
+    document.getElementById('rvAcct').textContent = document.querySelector('.acct-card.selected h4').textContent;
+    document.getElementById('rvDeposit').textContent = '$' + (document.getElementById('deposit').value || '0');
+    document.getElementById('rvUsername').textContent = document.getElementById('username').value;
+  });
+</script>
+</body>
+</html>

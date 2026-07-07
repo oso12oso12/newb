@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>City Prime Bank | Your Digital Banking Partner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0b1220;
+    --navy-900:#0e1729;
+    --navy-800:#141f33;
+    --navy-700:#1b2942;
+    --slate-700:#2c3549;
+    --slate-600:#3a4359;
+    --slate-card:#232c40;
+    --blue-500:#0f8fdc;
+    --blue-600:#0384c8;
+    --blue-700:#0369a1;
+    --blue-grad-1:#1a5f8f;
+    --blue-grad-2:#2e8bc2;
+    --green-500:#1fbf8f;
+    --purple-500:#a259e0;
+    --orange-500:#f4762b;
+    --ink-white:#ffffff;
+    --ink-fog:#c7d1e0;
+    --ink-mist:#8b96ab;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --radius-sm:10px;
+    --shadow-soft: 0 20px 45px rgba(4,10,25,0.35);
+    --maxw:1240px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--navy-900);
+    color:var(--ink-white);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Poppins',sans-serif; font-weight:700; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 32px;}
+  button{font-family:inherit; cursor:pointer;}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:15px 28px; border-radius:12px; font-weight:600; font-size:15.5px;
+    border:1.5px solid transparent; transition:.25s ease; white-space:nowrap;
+  }
+  .btn svg{width:18px; height:18px; flex-shrink:0;}
+  .btn-primary{background:var(--blue-600); color:#fff; box-shadow:0 10px 25px rgba(3,132,200,.35);}
+  .btn-primary:hover{background:var(--blue-500); transform:translateY(-2px);}
+  .btn-outline{background:rgba(255,255,255,.05); color:#fff; border-color:rgba(255,255,255,.35); backdrop-filter:blur(6px);}
+  .btn-outline:hover{background:rgba(255,255,255,.12); border-color:#fff;}
+  .btn-block{width:100%;}
+  .btn-sm{padding:9px 16px; font-size:13px; border-radius:9px;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:200;
+    background:linear-gradient(180deg,var(--navy-900) 0%, #0d1626 100%);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; height:78px;}
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-icon{
+    width:42px; height:42px; border-radius:11px;
+    background:linear-gradient(135deg,#39c1ff,#0f6fb8);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(15,143,220,.4);
+  }
+  .brand-icon svg{width:24px; height:24px;}
+  .brand-text .t1{font-family:'Poppins',sans-serif; font-weight:700; font-size:19px; line-height:1.1; color:#fff;}
+  .brand-text .t2{font-family:'Poppins',sans-serif; font-weight:400; font-size:13px; color:var(--ink-fog); letter-spacing:.06em;}
+
+  .nav-links{display:flex; align-items:center; gap:34px;}
+  .nav-links a{font-size:14.5px; font-weight:500; color:var(--ink-fog); transition:.2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-actions{display:flex; align-items:center; gap:14px;}
+  .nav-actions .btn{padding:12px 22px; font-size:14px;}
+
+  .hamburger{
+    display:none; width:44px; height:44px; border-radius:11px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+    align-items:center; justify-content:center; flex-direction:column; gap:5px;
+  }
+  .hamburger span{display:block; width:20px; height:2px; background:#fff; border-radius:2px; transition:.3s;}
+  .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.active span:nth-child(2){opacity:0;}
+  .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* Mobile drawer */
+  .mobile-drawer{
+    position:fixed; top:0; right:-100%; width:82%; max-width:340px; height:100vh;
+    background:var(--navy-800); z-index:300; padding:28px 26px;
+    box-shadow:-20px 0 50px rgba(0,0,0,.5); transition:right .35s ease;
+    display:flex; flex-direction:column; gap:6px; overflow-y:auto;
+  }
+  .mobile-drawer.open{right:0;}
+  .drawer-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:26px;}
+  .drawer-close{width:38px; height:38px; border-radius:10px; background:rgba(255,255,255,.08); border:none; color:#fff; display:flex; align-items:center; justify-content:center;}
+  .drawer-link{padding:15px 6px; font-size:16px; font-weight:500; color:var(--ink-fog); border-bottom:1px solid rgba(255,255,255,.07);}
+  .drawer-link:hover{color:#fff;}
+  .drawer-actions{margin-top:22px; display:flex; flex-direction:column; gap:12px;}
+  .scrim{position:fixed; inset:0; background:rgba(4,8,18,.6); z-index:250; opacity:0; pointer-events:none; transition:opacity .3s;}
+  .scrim.show{opacity:1; pointer-events:auto;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    min-height:92vh; display:flex; align-items:center;
+    background:#1a2334;
+  }
+  .hero-bg{
+    position:absolute; inset:0;
+    background-image:linear-gradient(180deg, rgba(9,15,28,.55) 0%, rgba(9,15,28,.75) 55%, rgba(9,15,28,.95) 100%), url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1400&auto=format&fit=crop');
+    background-size:cover; background-position:center;
+  }
+  .hero-inner{position:relative; z-index:2; width:100%; padding:70px 32px 60px;}
+  .hero-grid{max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center;}
+  .hero-icon{
+    width:74px; height:74px; border-radius:18px; background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center; margin-bottom:26px;
+  }
+  .hero-icon svg{width:36px; height:36px;}
+  .hero h1{font-size:56px; line-height:1.05; margin-bottom:14px;}
+  .hero .subhead{font-size:22px; font-weight:500; color:#cfe4f5; margin-bottom:20px;}
+  .hero p.lead{font-size:16.5px; color:var(--ink-fog); max-width:520px; margin-bottom:34px;}
+  .hero-btns{display:flex; gap:16px; margin-bottom:48px; flex-wrap:wrap;}
+  .hero-btns .btn{min-width:220px;}
+  .stat-row{display:flex; gap:56px;}
+  .stat-row .stat h3{font-size:34px; font-family:'Poppins',sans-serif; font-weight:800;}
+  .stat-row .stat span{font-size:13.5px; color:var(--ink-mist); text-transform:uppercase; letter-spacing:.05em;}
+  .hero-card-visual{
+    display:flex; justify-content:center; align-items:center;
+  }
+  .card-mock{
+    width:320px; padding:30px 26px; border-radius:22px;
+    background:linear-gradient(145deg,#1c2b45,#0e1626);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:var(--shadow-soft);
+  }
+  .card-mock .row-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:36px;}
+  .card-chip{width:42px; height:32px; border-radius:6px; background:linear-gradient(135deg,#e8c780,#b78d3f);}
+  .card-mock .brand-mini{font-family:'Poppins',sans-serif; font-weight:700; font-size:15px; color:#fff;}
+  .card-num{font-size:19px; letter-spacing:.14em; color:#e7edf6; margin-bottom:26px; font-family:'Poppins',sans-serif;}
+  .card-mock .row-bottom{display:flex; justify-content:space-between; color:var(--ink-mist); font-size:12px; text-transform:uppercase; letter-spacing:.05em;}
+  .card-mock .row-bottom b{display:block; color:#fff; font-size:14px; margin-top:4px; letter-spacing:0;}
+  .scroll-cue{
+    position:absolute; bottom:26px; left:50%; transform:translateX(-50%); z-index:2;
+    width:30px; height:46px; border:2px solid rgba(255,255,255,.5); border-radius:20px;
+    display:flex; justify-content:center; padding-top:8px;
+  }
+  .scroll-cue::before{content:''; width:4px; height:8px; border-radius:3px; background:#fff; animation:scrollcue 1.6s infinite;}
+  @keyframes scrollcue{0%{opacity:1; transform:translateY(0);} 100%{opacity:0; transform:translateY(14px);}}
+
+  /* ---------- Section shells ---------- */
+  section{padding:100px 0;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18);
+    padding:8px 18px; border-radius:30px; font-size:13px; font-weight:600;
+    letter-spacing:.03em; margin-bottom:22px;
+  }
+  .eyebrow svg{width:15px; height:15px;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+  .section-head h2{font-size:40px; margin-bottom:16px;}
+  .section-head p{color:var(--ink-fog); font-size:17px;}
+
+  /* ---------- Rates ---------- */
+  .rates{background:var(--navy-800);}
+  .rates-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:24px;}
+  .rate-card{
+    background:var(--slate-card); border:1px solid rgba(255,255,255,.06);
+    border-radius:var(--radius-lg); padding:34px 26px; text-align:center;
+    transition:.25s; position:relative;
+  }
+  .rate-card:hover{transform:translateY(-6px); border-color:rgba(255,255,255,.18);}
+  .rate-icon{
+    width:58px; height:58px; border-radius:16px; margin:0 auto 22px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .rate-icon svg{width:28px; height:28px; color:#fff;}
+  .rate-pct{font-family:'Poppins',sans-serif; font-size:34px; font-weight:800; margin-bottom:6px;}
+  .rate-apy{font-size:12px; color:var(--ink-mist); text-transform:uppercase; letter-spacing:.08em; margin-bottom:18px;}
+  .rate-title{font-size:16px; font-weight:700; margin-bottom:6px;}
+  .rate-sub{font-size:13px; color:var(--ink-mist); margin-bottom:20px;}
+  .rate-tag{
+    display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:9px;
+    font-size:12.5px; font-weight:700;
+  }
+  .rate-disclaimer{
+    margin-top:34px; display:flex; gap:10px; align-items:flex-start;
+    background:rgba(255,255,255,.04); border-radius:12px; padding:16px 20px;
+    color:var(--ink-mist); font-size:13.5px;
+  }
+  .rate-disclaimer svg{width:18px; height:18px; flex-shrink:0; margin-top:1px;}
+
+  /* Colors per rate card */
+  .rc-savings .rate-icon{background:#e8f6ff;} .rc-savings .rate-icon svg{color:#0f8fdc;}
+  .rc-savings .rate-pct{color:#3fb2f0;}
+  .rc-savings .rate-tag{background:rgba(15,143,220,.15); color:#4fbcf5;}
+  .rc-cert .rate-icon{background:rgba(31,191,143,.15);} .rc-cert .rate-icon svg{color:var(--green-500);}
+  .rc-cert .rate-pct{color:var(--green-500);}
+  .rc-cert .rate-tag{background:rgba(31,191,143,.15); color:var(--green-500);}
+  .rc-credit .rate-icon{background:rgba(162,89,224,.18);} .rc-credit .rate-icon svg{color:var(--purple-500);}
+  .rc-credit .rate-pct{color:var(--purple-500);}
+  .rc-credit .rate-tag{background:rgba(162,89,224,.18); color:var(--purple-500);}
+  .rc-loan .rate-icon{background:rgba(244,118,43,.18);} .rc-loan .rate-icon svg{color:var(--orange-500);}
+  .rc-loan .rate-pct{color:var(--orange-500);}
+  .rc-loan .rate-tag{background:rgba(244,118,43,.18); color:var(--orange-500);}
+
+  /* ---------- Services ---------- */
+  .services{background:linear-gradient(160deg,#164a72,#2e8bc2 60%,#3891c4);}
+  .services .eyebrow{background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.3);}
+  .services .section-head p{color:rgba(255,255,255,.85);}
+  .services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .service-card{
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.22);
+    border-radius:var(--radius-lg); padding:38px 30px; text-align:center;
+    backdrop-filter:blur(6px); transition:.25s;
+  }
+  .service-card:hover{background:rgba(255,255,255,.18); transform:translateY(-6px);}
+  .service-icon{
+    width:62px; height:62px; border-radius:16px; background:rgba(255,255,255,.22);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 22px;
+  }
+  .service-icon svg{width:30px; height:30px; color:#fff;}
+  .service-card h3{font-size:19px; margin-bottom:12px;}
+  .service-card p{font-size:14.5px; color:rgba(255,255,255,.82);}
+
+  /* ---------- Promo banner ---------- */
+  .promo-banner{background:var(--navy-900); padding:0 0 0;}
+  .promo-pill{
+    max-width:var(--maxw); margin:0 auto; transform:translateY(-30px);
+    background:linear-gradient(90deg,#0e9f6e,#1fbf8f);
+    border-radius:18px; padding:22px 40px; display:flex; align-items:center; gap:16px;
+    box-shadow:0 20px 40px rgba(14,159,110,.3); font-weight:700; font-size:16px;
+  }
+  .promo-pill svg{width:24px; height:24px; flex-shrink:0;}
+
+  /* ---------- Financial strength ---------- */
+  .strength{background:var(--navy-900); padding-top:60px;}
+  .strength-grid{display:grid; grid-template-columns:1fr .9fr; gap:70px; align-items:center;}
+  .strength h2{font-size:38px; margin-bottom:20px;}
+  .strength h2 em{font-style:normal; color:var(--green-500);}
+  .strength p.desc{color:var(--ink-fog); font-size:16px; margin-bottom:26px; max-width:520px;}
+  .check-list{margin-bottom:34px; display:flex; flex-direction:column; gap:14px;}
+  .check-item{display:flex; align-items:center; gap:12px; font-size:15.5px; color:#e6ecf7;}
+  .check-item .tick{
+    width:24px; height:24px; border-radius:50%; background:rgba(31,191,143,.18);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .check-item .tick svg{width:13px; height:13px; color:var(--green-500);}
+  .strength-media{border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid rgba(255,255,255,.08);}
+  .strength-media img{width:100%; height:420px; object-fit:cover;}
+
+  /* ---------- Why choose us ---------- */
+  .why{background:var(--navy-800);}
+  .why-grid{display:grid; grid-template-columns:.85fr 1.15fr; gap:70px; align-items:center;}
+  .why-list{display:flex; flex-direction:column; gap:32px;}
+  .why-item{display:flex; gap:18px;}
+  .why-icon{
+    width:52px; height:52px; border-radius:14px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .why-icon svg{width:24px; height:24px; color:#fff;}
+  .why-item h4{font-size:18px; margin-bottom:6px;}
+  .why-item p{color:var(--ink-fog); font-size:14.5px;}
+  .why-1 .why-icon{background:#1487c9;}
+  .why-2 .why-icon{background:#1fbf8f;}
+  .why-3 .why-icon{background:#a259e0;}
+  .photo-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .photo-grid img{border-radius:16px; width:100%; height:200px; object-fit:cover;}
+  .photo-grid img:nth-child(2){margin-top:34px;}
+  .photo-grid img:nth-child(3){margin-top:-34px;}
+
+  /* ---------- Testimonials ---------- */
+  .testi{background:var(--navy-900);}
+  .testi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+  .testi-card{
+    background:var(--slate-card); border:1px solid rgba(255,255,255,.06);
+    border-radius:var(--radius-lg); padding:32px 28px;
+  }
+  .stars{display:flex; gap:4px; margin-bottom:18px;}
+  .stars svg{width:18px; height:18px; color:#f5b400;}
+  .testi-card p.quote{font-size:15.5px; color:#dde5f2; font-style:italic; margin-bottom:24px;}
+  .testi-person{display:flex; align-items:center; gap:12px;}
+  .avatar{width:42px; height:42px; border-radius:50%; background:#33507a; display:flex; align-items:center; justify-content:center;}
+  .avatar svg{width:20px; height:20px; color:#a9c3e0;}
+  .testi-person .name{font-weight:700; font-size:14.5px;}
+  .testi-person .role{font-size:12.5px; color:var(--ink-mist);}
+
+  /* ---------- Contact info ---------- */
+  .contact{background:var(--navy-800);}
+  .contact-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:24px;}
+  .contact-card{
+    background:var(--slate-card); border:1px solid rgba(255,255,255,.06);
+    border-radius:var(--radius-lg); padding:30px 22px; text-align:center;
+  }
+  .contact-icon{
+    width:54px; height:54px; border-radius:14px; background:rgba(15,143,220,.15);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 18px;
+  }
+  .contact-icon svg{width:26px; height:26px; color:var(--blue-500);}
+  .contact-card h4{font-size:16.5px; margin-bottom:10px;}
+  .contact-card p{font-size:13.5px; color:var(--ink-mist); line-height:1.7;}
+  .contact-card a{color:#6fc4f0;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--navy-950); padding-top:70px;}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:50px; border-bottom:1px solid rgba(255,255,255,.08);}
+  .footer-brand p{color:var(--ink-mist); font-size:14px; margin:18px 0 22px; max-width:320px;}
+  .social-row{display:flex; gap:12px;}
+  .social-row a{
+    width:38px; height:38px; border-radius:50%; background:var(--blue-600);
+    display:flex; align-items:center; justify-content:center; transition:.2s;
+  }
+  .social-row a:hover{background:var(--blue-500); transform:translateY(-3px);}
+  .social-row svg{width:17px; height:17px; color:#fff;}
+  .footer-col h5{font-size:15px; margin-bottom:20px; padding-left:13px; border-left:3px solid var(--blue-500);}
+  .footer-col:nth-of-type(3) h5{border-left-color:var(--green-500);}
+  .footer-col:nth-of-type(4) h5{border-left-color:var(--purple-500);}
+  .footer-col a{display:block; color:var(--ink-mist); font-size:14px; margin-bottom:13px; transition:.2s;}
+  .footer-col a:hover{color:#fff;}
+  .footer-bottom{
+    padding:26px 0 90px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  .footer-bottom .copy{font-size:13px; color:var(--ink-mist);}
+  .badges{display:flex; gap:18px; font-size:12.5px; color:var(--ink-mist);}
+  .badges span{display:inline-flex; align-items:center; gap:6px;}
+  .badges svg{width:15px; height:15px;}
+  .legal-links{display:flex; gap:20px;}
+  .legal-links a{font-size:12.5px; color:var(--ink-mist);}
+  .legal-links a:hover{color:#fff;}
+
+  /* ---------- Mobile sticky action bar ---------- */
+  .mobile-actionbar{
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:150;
+    background:var(--navy-800); border-top:1px solid rgba(255,255,255,.1);
+  }
+  .mobile-actionbar .row{display:grid; grid-template-columns:1fr 1fr;}
+  .mobile-actionbar a{padding:16px 0; text-align:center; font-weight:600; font-size:14.5px; display:flex; align-items:center; justify-content:center; gap:8px;}
+  .mobile-actionbar a svg{width:16px; height:16px;}
+  .mobile-actionbar .login{color:#6fc4f0;}
+  .mobile-actionbar .register{background:var(--blue-600); color:#fff;}
+
+  /* =============== RESPONSIVE =============== */
+  @media (max-width:1080px){
+    .rates-grid{grid-template-columns:repeat(2,1fr);}
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .contact-grid{grid-template-columns:repeat(2,1fr);}
+    .testi-grid{grid-template-columns:repeat(2,1fr);}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+
+  @media (max-width:900px){
+    .nav-links, .nav-actions{display:none;}
+    .hamburger{display:flex;}
+    .hero-grid{grid-template-columns:1fr; text-align:center;}
+    .hero-icon{margin-left:auto; margin-right:auto;}
+    .hero p.lead{margin-left:auto; margin-right:auto;}
+    .hero-btns{justify-content:center;}
+    .stat-row{justify-content:center;}
+    .hero-card-visual{display:none;}
+    .why-grid{grid-template-columns:1fr;}
+    .strength-grid{grid-template-columns:1fr;}
+    .strength-media img{height:280px;}
+    body{padding-bottom:64px;}
+    .mobile-actionbar{display:block;}
+  }
+
+  @media (max-width:640px){
+    .wrap{padding:0 20px;}
+    section{padding:64px 0;}
+    .hero{min-height:auto; padding-top:10px;}
+    .hero-inner{padding:48px 20px 56px;}
+    .hero h1{font-size:36px;}
+    .hero .subhead{font-size:18px;}
+    .hero-btns{flex-direction:column; width:100%;}
+    .hero-btns .btn{width:100%; min-width:0;}
+    .stat-row{gap:36px;}
+    .rates-grid, .services-grid, .contact-grid, .testi-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr; gap:34px;}
+    .section-head h2{font-size:28px;}
+    .promo-pill{flex-direction:row; padding:18px 22px; font-size:14px; border-radius:14px;}
+    .footer-bottom{flex-direction:column; align-items:flex-start;}
+    .photo-grid img:nth-child(2){margin-top:0;}
+    .photo-grid img:nth-child(3){margin-top:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg>
+      </div>
+      <div class="brand-text">
+        <div class="t1">City Prime</div>
+        <div class="t2">Bank</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#rates">Rates</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="#login" class="btn btn-outline btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        Login
+      </a>
+      <a href="#register" class="btn btn-primary btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+        Register
+      </a>
+    </div>
+
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<aside class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-top">
+    <div class="brand">
+      <div class="brand-icon" style="width:36px;height:36px;">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg>
+      </div>
+      <div class="brand-text"><div class="t1" style="font-size:16px;">City Prime</div></div>
+    </div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <a class="drawer-link" href="#home">Home</a>
+  <a class="drawer-link" href="#services">Services</a>
+  <a class="drawer-link" href="#rates">Rates</a>
+  <a class="drawer-link" href="#about">About</a>
+  <a class="drawer-link" href="#contact">Contact</a>
+  <div class="drawer-actions">
+    <a href="#login" class="btn btn-outline btn-block">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+      Login
+    </a>
+    <a href="#register" class="btn btn-primary btn-block">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+      Register
+    </a>
+  </div>
+</aside>
+
+<!-- ===================== HERO ===================== -->
+<section id="home" class="hero" style="padding:0;">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 21h18M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg>
+        </div>
+        <h1>City Prime</h1>
+        <p class="subhead">Your Digital Banking Partner</p>
+        <p class="lead">We do banking differently. We believe that people come first, and that everyone deserves a great experience every step of the way.</p>
+        <div class="hero-btns">
+          <a href="#register" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+            Open Account Today
+          </a>
+          <a href="#login" class="btn btn-outline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+            Login to Banking
+          </a>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><h3>50K+</h3><span>Happy Customers</span></div>
+          <div class="stat"><h3>$2.5B+</h3><span>Assets Managed</span></div>
+        </div>
+      </div>
+      <div class="hero-card-visual">
+        <div class="card-mock">
+          <div class="row-top">
+            <span class="brand-mini">City Prime</span>
+            <div class="card-chip"></div>
+          </div>
+          <div class="card-num">•••• •••• •••• 4471</div>
+          <div class="row-bottom">
+            <div>Card Holder<b>A. Whitfield</b></div>
+            <div>Expires<b>09/29</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"></div>
+</section>
+
+<!-- ===================== RATES ===================== -->
+<section id="rates" class="rates">
+  <div class="wrap">
+    <div class="section-head center" style="margin-left:auto;margin-right:auto;">
+      <div class="eyebrow" style="background:rgba(15,143,220,.15); border-color:rgba(15,143,220,.3); color:#4fbcf5;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        City Prime Rates
+      </div>
+      <h2>City Prime Member Care</h2>
+      <p>Discover competitive rates designed to help your money grow faster</p>
+    </div>
+
+    <div class="rates-grid">
+      <div class="rate-card rc-savings">
+        <div class="rate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 5c-1.5-1.5-4-2-6-2C8.5 3 5 6 5 10c0 2 1 3.5 2 5l-1 3h4l1-2c1 .3 2 .3 3 0l1 2h4l-1-3c1-1.3 2-3 2-5 0-1.5-.5-3-2-5z"/><circle cx="15" cy="9" r="1"/></svg></div>
+        <div class="rate-pct">3.75%</div>
+        <div class="rate-apy">APY*</div>
+        <div class="rate-title">High Yield Savings</div>
+        <div class="rate-sub">High Yield Savings Rate</div>
+        <span class="rate-tag">★ Featured</span>
+      </div>
+      <div class="rate-card rc-cert">
+        <div class="rate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+        <div class="rate-pct">3.65%</div>
+        <div class="rate-apy">APY*</div>
+        <div class="rate-title">18 Month Certificate</div>
+        <div class="rate-sub">City Prime Certificate Rates</div>
+        <span class="rate-tag">💳 Savings</span>
+      </div>
+      <div class="rate-card rc-credit">
+        <div class="rate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div class="rate-pct">4.00%</div>
+        <div class="rate-apy">APR*</div>
+        <div class="rate-title">Credit Cards</div>
+        <div class="rate-sub">City Prime Credit Card Rates</div>
+        <span class="rate-tag">💳 Credit</span>
+      </div>
+      <div class="rate-card rc-loan">
+        <div class="rate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></svg></div>
+        <div class="rate-pct">15.49%</div>
+        <div class="rate-apy">APR*</div>
+        <div class="rate-title">Loans</div>
+        <div class="rate-sub">City Prime Standard Loan Rates</div>
+        <span class="rate-tag">% Mortgage</span>
+      </div>
+    </div>
+
+    <div class="rate-disclaimer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>*Annual Percentage Yield. Rates subject to change. Terms and conditions apply.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SERVICES ===================== -->
+<section id="services" class="services">
+  <div class="wrap">
+    <div class="section-head center" style="margin-left:auto;margin-right:auto;">
+      <div class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg>
+        Our Services
+      </div>
+      <h2>How Can We Help You Today?</h2>
+      <p>Comprehensive banking solutions tailored to your needs</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 21h18M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg></div>
+        <h3>Deposit Accounts</h3>
+        <p>Secure your money with our high-yield savings and checking accounts designed for growth.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <h3>Credit Cards</h3>
+        <p>Find the perfect credit card for your lifestyle and spending habits with competitive rates.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5"/></svg></div>
+        <h3>Loans</h3>
+        <p>Get competitive rates on personal, auto, and home loans tailored to your financial goals.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></div>
+        <h3>Business Banking</h3>
+        <p>Comprehensive banking solutions designed to help your business thrive and grow.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg></div>
+        <h3>Wealth &amp; Retire</h3>
+        <p>Plan for your future with our expert investment and retirement planning services.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+        <h3>About City Prime</h3>
+        <p>Learn more about our commitment to exceptional banking services and community support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROMO BANNER ===================== -->
+<div class="promo-banner">
+  <div class="promo-pill wrap" style="max-width:1080px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 9.5c0-1 1-1.5 3-1.5s3 .8 3 2-1 1.5-3 1.8-3 .9-3 2 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
+    <span>Get $200* With a Checking Account Built for You</span>
+  </div>
+</div>
+
+<!-- ===================== FINANCIAL STRENGTH ===================== -->
+<section id="about" class="strength">
+  <div class="wrap">
+    <div class="strength-grid">
+      <div>
+        <h2>Start Building Your <em>Financial Strength</em></h2>
+        <p class="desc">For a limited time, get $200 when you open any new account, and let us help you reach your financial goals. Open a new account online or in person at any of our locations.</p>
+        <div class="check-list">
+          <div class="check-item"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span>No minimum balance required</div>
+          <div class="check-item"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span>Free online and mobile banking</div>
+          <div class="check-item"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span>24/7 customer support</div>
+        </div>
+        <a href="#register" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          Open Account Now
+        </a>
+      </div>
+      <div class="strength-media">
+        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=900&auto=format&fit=crop" alt="Happy customer banking online">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHY CHOOSE US ===================== -->
+<section class="why">
+  <div class="wrap">
+    <div class="why-grid">
+      <div class="why-list">
+        <div class="why-item why-1">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></div>
+          <div><h4>Competitive Rates</h4><p>Better rates on savings, loans, and credit cards designed to maximize your financial growth.</p></div>
+        </div>
+        <div class="why-item why-2">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6M17 8a3 3 0 1 1 3.5 3M22 20c0-2.6-2.1-4.8-5-5.6"/></svg></div>
+          <div><h4>Member-Focused</h4><p>We're owned by our members, not shareholders. Your success is our priority.</p></div>
+        </div>
+        <div class="why-item why-3">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 21s-7-4.35-9.5-8.5C1 9 2.5 5.5 6 5c2-.3 3.7.7 6 3 2.3-2.3 4-3.3 6-3 3.5.5 5 4 3.5 7.5C19 16.65 12 21 12 21z"/></svg></div>
+          <div><h4>Community Committed</h4><p>Supporting local communities and causes that matter to our members.</p></div>
+        </div>
+      </div>
+      <div class="photo-grid">
+        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=600&auto=format&fit=crop" alt="Team collaborating">
+        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop" alt="Community member">
+        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=600&auto=format&fit=crop" alt="Team member portrait">
+        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop" alt="Professional at desk">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section class="testi">
+  <div class="wrap">
+    <div class="section-head center" style="margin-left:auto;margin-right:auto;">
+      <h2>Hear From Our Customers</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"I am impressed with the customer service and speed of payout."</p>
+        <div class="testi-person">
+          <div class="avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
+          <div><div class="name">Sarah Morris</div><div class="role">Verified Customer</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Excellent service and competitive rates. Highly recommended!"</p>
+        <div class="testi-person">
+          <div class="avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
+          <div><div class="name">John Davis</div><div class="role">Business Owner</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"The mobile app is fantastic and customer support is top-notch."</p>
+        <div class="testi-person">
+          <div class="avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
+          <div><div class="name">Emily Johnson</div><div class="role">Personal Banking</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h4>Banking Hours</h4>
+        <p>Mon-Fri: 9AM-5PM<br>Sat: 9AM-1PM<br>Sun: Closed</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 3a2 2 0 0 1-.4 2.1L8.1 10a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c1 .4 2 .7 3 .8a2 2 0 0 1 1.7 2z"/></svg></div>
+        <h4>Phone Banking</h4>
+        <p>Available 24/7<br>Call: 1-800-BANKING<br>International: +1-555-0123</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg></div>
+        <h4>Email Support</h4>
+        <p>Response within 24hrs<br><a href="mailto:support@cityprime.emiinnovation.org">support@cityprime.emiinnovation.org</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h4>Visit Us</h4>
+        <p>123 Banking Street<br>Financial District<br>New York, NY 10001</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand">
+        <div class="brand">
+          <div class="brand-icon" style="width:38px;height:38px;">
+            <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg>
+          </div>
+          <div class="brand-text"><div class="t1" style="font-size:17px;">City Prime</div><div class="t2">Bank</div></div>
+        </div>
+        <p>Building financial strength together with personalized banking solutions for every member. Your trusted partner in financial growth.</p>
+        <div class="social-row">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="#fff"><path d="M13 22v-9h3l.5-4H13V6.5c0-1.15.32-1.94 1.98-1.94H17V1.1C16.36 1.03 15.1 1 13.6 1 10.5 1 8.5 2.86 8.5 6.1V9H5v4h3.5v9h4.5z"/></svg></a>
+          <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="#fff"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4 4 0 0 1-1.9.1 4.1 4.1 0 0 0 3.8 2.8A8.2 8.2 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="#fff"><path d="M4.98 3.5C4.98 4.9 3.9 6 2.5 6S0 4.9 0 3.5 1.1 1 2.5 1s2.48 1.1 2.48 2.5zM.5 8.5h4V23h-4V8.5zm7.5 0h3.8v2h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.9c0-1.65-.03-3.77-2.3-3.77-2.3 0-2.65 1.8-2.65 3.65V23h-4V8.5z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2c2.7 0 3.06.01 4.12.06 1.06.05 1.79.22 2.43.47.66.26 1.22.6 1.77 1.16.55.55.9 1.11 1.16 1.77.25.64.42 1.37.47 2.43.05 1.06.06 1.42.06 4.12s-.01 3.06-.06 4.12c-.05 1.06-.22 1.79-.47 2.43a4.9 4.9 0 0 1-1.16 1.77 4.9 4.9 0 0 1-1.77 1.16c-.64.25-1.37.42-2.43.47-1.06.05-1.42.06-4.12.06s-3.06-.01-4.12-.06c-1.06-.05-1.79-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.16 4.9 4.9 0 0 1-1.16-1.77c-.25-.64-.42-1.37-.47-2.43C2.01 15.06 2 14.7 2 12s.01-3.06.06-4.12c.05-1.06.22-1.79.47-2.43.26-.66.6-1.22 1.16-1.77A4.9 4.9 0 0 1 5.46.52c.64-.25 1.37-.42 2.43-.47C8.94.01 9.3 0 12 0zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.2-8.4a1.17 1.17 0 1 1-2.34 0 1.17 1.17 0 0 1 2.34 0z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#">Grants &amp; Aid</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <a href="#">Personal Banking</a>
+        <a href="#">Business Banking</a>
+        <a href="#">Loans &amp; Credit</a>
+        <a href="#">Cards</a>
+      </div>
+      <div class="footer-col">
+        <h5>Member Services</h5>
+        <a href="#">Online Banking</a>
+        <a href="#">Mobile App</a>
+        <a href="#">ATM Locations</a>
+        <a href="#">Security Center</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="copy">© 2025 City Prime. All rights reserved.</div>
+      <div class="badges">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#1fbf8f" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>FDIC Insured</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="#8b96ab" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>256-bit SSL</span>
+      </div>
+      <div class="legal-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Accessibility</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== MOBILE STICKY ACTION BAR ===================== -->
+<div class="mobile-actionbar">
+  <div class="row">
+    <a class="login" href="#login">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+      Login
+    </a>
+    <a class="register" href="#register">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+      Register
+    </a>
+  </div>
+</div>
+
+<script>
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const drawer = document.getElementById('mobileDrawer');
+  const scrim = document.getElementById('scrim');
+  const drawerClose = document.getElementById('drawerClose');
+
+  function openDrawer(){
+    drawer.classList.add('open');
+    scrim.classList.add('show');
+    hamburgerBtn.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    scrim.classList.remove('show');
+    hamburgerBtn.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  hamburgerBtn.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+  drawerClose.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+</script>
+</body>
+</html>

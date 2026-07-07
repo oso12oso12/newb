@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Settings | City Prime Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'bank/assets/style.css' %}">
+<style>
+  .settings-row{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; border-bottom:1px solid rgba(255,255,255,.08);}
+  .settings-row:last-child{border-bottom:none;}
+  .settings-row .lbl-main{font-size:14px; font-weight:600;}
+  .settings-row .lbl-sub{font-size:12.5px; color:var(--ink-mist); margin-top:2px;}
+  .switch{position:relative; width:42px; height:24px; flex-shrink:0;}
+  .switch input{opacity:0; width:0; height:0;}
+  .switch .track{position:absolute; inset:0; background:#3a4160; border-radius:24px; cursor:pointer; transition:.2s;}
+  .switch .track:before{content:""; position:absolute; width:18px; height:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s;}
+  .switch input:checked + .track{background:var(--blue-500,#0f8fdc);}
+  .switch input:checked + .track:before{transform:translateX(18px);}
+  .settings-section + .settings-section{margin-top:22px;}
+</style>
+</head>
+<body>
+
+<!-- ===================== MOBILE TOPBAR ===================== -->
+<div class="mobile-topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <div class="brand">
+    <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg></div>
+    <div class="brand-text"><div class="t1">City Prime</div></div>
+  </div>
+  <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#a259e0,#5b3ea6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;">SM</div>
+</div>
+<div class="side-scrim" id="sideScrim"></div>
+
+<div class="app-shell">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <a href="{% url 'bank:index' %}" class="brand">
+      <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg></div>
+      <div class="brand-text"><div class="t1">City Prime</div><div class="t2">Bank</div></div>
+    </a>
+
+    <nav class="side-nav">
+      <a href="{% url 'bank:dashboard' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a href="{% url 'bank:accounts' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h18M5 6h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/></svg>
+        Accounts
+      </a>
+      <a href="{% url 'bank:transfer' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10 3 6l4-4M3 6h13a4 4 0 0 1 4 4v1M17 14l4 4-4 4M21 18H8a4 4 0 0 1-4-4v-1"/></svg>
+        Transfer
+      </a>
+      <a href="{% url 'bank:deposit' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Deposit
+      </a>
+      <a href="{% url 'bank:accounts' %}#cards" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>
+        Cards
+      </a>
+      <a href="{% url 'bank:dashboard' %}#transactions" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 4v5h5M9 13h6M9 17h6"/></svg>
+        Transactions
+      </a>
+
+      <div class="side-label">Support</div>
+      <a href="{% url 'bank:help_center' %}" class="side-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4M12 17h.01"/></svg>
+        Help Center
+      </a>
+      <a href="{% url 'bank:settings_page' %}" class="side-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.2 2.5a2 2 0 0 1 1.8 1.1l1 2.1 2.3.3a2 2 0 0 1 1.1 3.4l-1.7 1.6.4 2.3a2 2 0 0 1-2.9 2.1L12 14.3l-2.1 1.1a2 2 0 0 1-2.9-2.1l.4-2.3L5.7 9.4a2 2 0 0 1 1.1-3.4l2.3-.3 1-2.1a2 2 0 0 1 1.8-1.1z"/><circle cx="12" cy="12" r="9"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="side-bottom">
+      <div class="side-user">
+        <div class="av">SM</div>
+        <div>
+          <div class="nm">Sarah Morris</div>
+          <div class="em">•••• 4821</div>
+        </div>
+        <a href="{% url 'bank:logout' %}" aria-label="Log out" title="Log out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Settings</h1>
+        <div class="sub">Manage your profile, security, and notification preferences</div>
+      </div>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert" style="position:static; background:rgba(31,191,143,.12); border:1px solid rgba(31,191,143,.4); color:#1fbf8f; margin-bottom:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="panel settings-section">
+      <div class="panel-head"><h3>Profile</h3></div>
+
+      {% if profile_form.errors %}
+        <div class="alert" style="position:static; margin-bottom:20px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <div>
+            <strong>Please fix the following:</strong>
+            <ul style="margin:8px 0 0 18px; padding:0;">
+              {% for field in profile_form %}
+                {% for error in field.errors %}
+                  <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+              {% for error in profile_form.non_field_errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+
+      <form method="post" action="{% url 'bank:settings_page' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="profile">
+        <div class="field-row">
+          <div class="field">
+            <label for="id_first_name">Full name</label>
+            <input type="text" id="id_first_name" name="first_name" value="{{ profile_form.first_name.value|default:'' }}">
+          </div>
+          <div class="field">
+            <label for="id_last_name">Last name</label>
+            <input type="text" id="id_last_name" name="last_name" value="{{ profile_form.last_name.value|default:'' }}">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="id_email">Email address</label>
+            <input type="email" id="id_email" name="email" value="{{ profile_form.email.value|default:'' }}">
+          </div>
+          <div class="field">
+            <label for="id_phone">Phone number</label>
+            <input type="tel" id="id_phone" name="phone" value="{{ profile_form.phone.value|default:'' }}">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="id_street">Street address</label>
+            <input type="text" id="id_street" name="street" value="{{ profile_form.street.value|default:'' }}">
+          </div>
+          <div class="field">
+            <label for="id_apartment">Apartment / Unit</label>
+            <input type="text" id="id_apartment" name="apartment" value="{{ profile_form.apartment.value|default:'' }}">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="id_city">City</label>
+            <input type="text" id="id_city" name="city" value="{{ profile_form.city.value|default:'' }}">
+          </div>
+          <div class="field">
+            <label for="id_state">State</label>
+            <input type="text" id="id_state" name="state" value="{{ profile_form.state.value|default:'' }}">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="id_zip_code">ZIP code</label>
+            <input type="text" id="id_zip_code" name="zip_code" value="{{ profile_form.zip_code.value|default:'' }}">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+      </form>
+    </div>
+
+    <div class="panel settings-section">
+      <div class="panel-head"><h3>Security</h3></div>
+      <div class="settings-row">
+        <div>
+          <div class="lbl-main">Two-factor authentication</div>
+          <div class="lbl-sub">Require a code at sign-in for extra security</div>
+        </div>
+        <label class="switch"><input type="checkbox" data-toggle-field="two_factor_enabled" {% if profile.two_factor_enabled %}checked{% endif %}><span class="track"></span></label>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="lbl-main">Biometric login</div>
+          <div class="lbl-sub">Use Face ID or fingerprint on this device</div>
+        </div>
+        <label class="switch"><input type="checkbox" data-toggle-field="biometric_enabled" {% if profile.biometric_enabled %}checked{% endif %}><span class="track"></span></label>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="lbl-main">Password</div>
+          <div class="lbl-sub">Last changed {{ profile.updated_at|timesince }} ago</div>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" id="togglePasswordForm">Change Password</button>
+      </div>
+
+      <div id="passwordFormWrap" style="display:none; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.08);">
+        {% if password_form.errors %}
+          <div class="alert" style="position:static; margin-bottom:20px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+            <div>
+              <strong>Please fix the following:</strong>
+              <ul style="margin:8px 0 0 18px; padding:0;">
+                {% for field in password_form %}
+                  {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                  {% endfor %}
+                {% endfor %}
+                {% for error in password_form.non_field_errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+        <form method="post" action="{% url 'bank:settings_page' %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="password">
+          <div class="field-row">
+            <div class="field">
+              <label for="id_old_password">Current password</label>
+              <input type="password" id="id_old_password" name="old_password">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="id_new_password1">New password</label>
+              <input type="password" id="id_new_password1" name="new_password1">
+            </div>
+            <div class="field">
+              <label for="id_new_password2">Confirm new password</label>
+              <input type="password" id="id_new_password2" name="new_password2">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm">Update Password</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="panel settings-section">
+      <div class="panel-head"><h3>Notifications</h3></div>
+      <div class="settings-row">
+        <div>
+          <div class="lbl-main">Transaction alerts</div>
+          <div class="lbl-sub">Get notified for every card purchase</div>
+        </div>
+        <label class="switch"><input type="checkbox" data-toggle-field="notify_transactions" {% if profile.notify_transactions %}checked{% endif %}><span class="track"></span></label>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="lbl-main">Low balance warnings</div>
+          <div class="lbl-sub">Alert me when balance drops below $100</div>
+        </div>
+        <label class="switch"><input type="checkbox" data-toggle-field="notify_low_balance" {% if profile.notify_low_balance %}checked{% endif %}><span class="track"></span></label>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="lbl-main">Promotional emails</div>
+          <div class="lbl-sub">Offers, rate changes, and product news</div>
+        </div>
+        <label class="switch"><input type="checkbox" data-toggle-field="notify_promotions" {% if profile.notify_promotions %}checked{% endif %}><span class="track"></span></label>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 13 4 4L19 7"/></svg>
+  <div class="msg"><strong id="toastTitle">Success</strong><span id="toastBody">Action completed.</span></div>
+</div>
+
+<script src="{% static 'bank/assets/app.js' %}"></script>
+<script>
+  CPB.initChrome();
+
+  const togglePasswordBtn = document.getElementById('togglePasswordForm');
+  const passwordFormWrap = document.getElementById('passwordFormWrap');
+  if (togglePasswordBtn && passwordFormWrap) {
+    togglePasswordBtn.addEventListener('click', () => {
+      const showing = passwordFormWrap.style.display !== 'none';
+      passwordFormWrap.style.display = showing ? 'none' : 'block';
+    });
+    {% if password_form.errors %}passwordFormWrap.style.display = 'block';{% endif %}
+  }
+
+  function getCookie(name) {
+    const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return match ? match.pop() : '';
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  const toggleLabels = {
+    two_factor_enabled: 'Two-Factor Authentication',
+    biometric_enabled: 'Biometric Login',
+    notify_transactions: 'Transaction Alerts',
+    notify_low_balance: 'Low Balance Warnings',
+    notify_promotions: 'Promotional Emails',
+  };
+
+  document.querySelectorAll('[data-toggle-field]').forEach(input => {
+    input.addEventListener('change', async () => {
+      const field = input.dataset.toggleField;
+      const value = input.checked;
+      input.disabled = true;
+      try {
+        const res = await fetch("{% url 'bank:settings_toggle' %}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrftoken,
+          },
+          body: `field=${encodeURIComponent(field)}&value=${value}`,
+        });
+        const data = await res.json();
+        if (data.ok) {
+          const label = toggleLabels[field] || 'Setting';
+          CPB.showToast(label, `${label} ${value ? 'enabled' : 'disabled'}.`);
+        } else {
+          input.checked = !value;
+          CPB.showToast('Error', 'Could not save that setting. Please try again.');
+        }
+      } catch (e) {
+        input.checked = !value;
+        CPB.showToast('Error', 'Could not save that setting. Please try again.');
+      } finally {
+        input.disabled = false;
+      }
+    });
+  });
+</script>
+</body>
+</html>

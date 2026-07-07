@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign On | City Prime Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0b1220;
+    --navy-900:#0e1729;
+    --navy-800:#141f33;
+    --navy-700:#1b2942;
+    --slate-card:#232c40;
+    --blue-500:#0f8fdc;
+    --blue-600:#0384c8;
+    --green-500:#1fbf8f;
+    --purple-500:#a259e0;
+    --orange-500:#f4762b;
+    --red-500:#ef4444;
+    --ink-white:#ffffff;
+    --ink-fog:#c7d1e0;
+    --ink-mist:#8b96ab;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --shadow-soft: 0 20px 45px rgba(4,10,25,0.35);
+    --maxw:1240px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--navy-900);
+    color:var(--ink-white);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+  h1,h2,h3,h4{font-family:'Poppins',sans-serif; font-weight:700; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 32px;}
+  button{font-family:inherit; cursor:pointer;}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:15px 28px; border-radius:12px; font-weight:600; font-size:15.5px;
+    border:1.5px solid transparent; transition:.25s ease; white-space:nowrap;
+  }
+  .btn svg{width:18px; height:18px; flex-shrink:0;}
+  .btn-primary{background:var(--blue-600); color:#fff; box-shadow:0 10px 25px rgba(3,132,200,.35);}
+  .btn-primary:hover{background:var(--blue-500); transform:translateY(-2px);}
+  .btn-outline{background:rgba(255,255,255,.05); color:#fff; border-color:rgba(255,255,255,.35);}
+  .btn-outline:hover{background:rgba(255,255,255,.12); border-color:#fff;}
+  .btn-block{width:100%;}
+  .btn-sm{padding:9px 16px; font-size:13px; border-radius:9px;}
+
+  /* ---------- Header (shared) ---------- */
+  header{
+    position:sticky; top:0; z-index:200;
+    background:linear-gradient(180deg,var(--navy-900) 0%, #0d1626 100%);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; height:78px;}
+  .brand{display:flex; align-items:center; gap:12px;}
+  .brand-icon{
+    width:42px; height:42px; border-radius:11px;
+    background:linear-gradient(135deg,#39c1ff,#0f6fb8);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(15,143,220,.4);
+  }
+  .brand-icon svg{width:24px; height:24px;}
+  .brand-text .t1{font-family:'Poppins',sans-serif; font-weight:700; font-size:19px; line-height:1.1; color:#fff;}
+  .brand-text .t2{font-family:'Poppins',sans-serif; font-weight:400; font-size:13px; color:var(--ink-fog); letter-spacing:.06em;}
+  .nav-links{display:flex; align-items:center; gap:34px;}
+  .nav-links a{font-size:14.5px; font-weight:500; color:var(--ink-fog); transition:.2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-links a.active{color:#fff;}
+  .nav-actions{display:flex; align-items:center; gap:14px;}
+  .nav-actions .btn{padding:12px 22px; font-size:14px;}
+  .hamburger{
+    display:none; width:44px; height:44px; border-radius:11px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+    align-items:center; justify-content:center; flex-direction:column; gap:5px;
+  }
+  .hamburger span{display:block; width:20px; height:2px; background:#fff; border-radius:2px; transition:.3s;}
+  .hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.active span:nth-child(2){opacity:0;}
+  .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-drawer{
+    position:fixed; top:0; right:-100%; width:82%; max-width:340px; height:100vh;
+    background:var(--navy-800); z-index:300; padding:28px 26px;
+    box-shadow:-20px 0 50px rgba(0,0,0,.5); transition:right .35s ease;
+    display:flex; flex-direction:column; gap:6px; overflow-y:auto;
+  }
+  .mobile-drawer.open{right:0;}
+  .drawer-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:26px;}
+  .drawer-close{width:38px; height:38px; border-radius:10px; background:rgba(255,255,255,.08); border:none; color:#fff; display:flex; align-items:center; justify-content:center;}
+  .drawer-link{padding:15px 6px; font-size:16px; font-weight:500; color:var(--ink-fog); border-bottom:1px solid rgba(255,255,255,.07);}
+  .drawer-link:hover{color:#fff;}
+  .drawer-actions{margin-top:22px; display:flex; flex-direction:column; gap:12px;}
+  .scrim{position:fixed; inset:0; background:rgba(4,8,18,.6); z-index:250; opacity:0; pointer-events:none; transition:opacity .3s;}
+  .scrim.show{opacity:1; pointer-events:auto;}
+
+  /* ---------- Auth layout ---------- */
+  main{flex:1; display:flex;}
+  .auth-shell{
+    display:grid; grid-template-columns:1.05fr 1fr; width:100%;
+    min-height:calc(100vh - 79px);
+  }
+  .auth-side{
+    position:relative; overflow:hidden;
+    background-image:linear-gradient(160deg, rgba(9,15,28,.7) 0%, rgba(9,15,28,.92) 100%), url('https://images.unsplash.com/photo-1541354329998-f4d9a9f9297f?q=80&w=1200&auto=format&fit=crop');
+    background-size:cover; background-position:center;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:60px 60px;
+  }
+  .auth-side .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18);
+    padding:8px 18px; border-radius:30px; font-size:13px; font-weight:600;
+    margin-bottom:26px; width:fit-content;
+  }
+  .auth-side .eyebrow svg{width:15px; height:15px;}
+  .auth-side h1{font-size:38px; line-height:1.15; margin-bottom:18px; max-width:440px;}
+  .auth-side p.lead{color:var(--ink-fog); font-size:16px; max-width:420px; margin-bottom:40px;}
+  .side-feature{display:flex; gap:16px; margin-bottom:26px; max-width:420px;}
+  .side-feature .ic{
+    width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .side-feature .ic svg{width:21px; height:21px; color:#fff;}
+  .side-feature h4{font-size:15.5px; margin-bottom:4px;}
+  .side-feature p{font-size:13.5px; color:var(--ink-mist);}
+
+  .auth-form-col{
+    display:flex; align-items:center; justify-content:center;
+    padding:60px 40px; background:var(--navy-900);
+  }
+  .auth-card{width:100%; max-width:420px;}
+  .auth-card .top-badge{
+    width:52px; height:52px; border-radius:14px; background:linear-gradient(135deg,#39c1ff,#0f6fb8);
+    display:flex; align-items:center; justify-content:center; margin-bottom:22px;
+    box-shadow:0 8px 20px rgba(15,143,220,.35);
+  }
+  .auth-card .top-badge svg{width:26px; height:26px;}
+  .auth-card h2{font-size:28px; margin-bottom:8px;}
+  .auth-card .sub{color:var(--ink-mist); font-size:14.5px; margin-bottom:30px;}
+
+  .tabs{display:flex; background:var(--slate-card); border-radius:12px; padding:5px; margin-bottom:28px; border:1px solid rgba(255,255,255,.06);}
+  .tabs button{
+    flex:1; padding:11px 0; border:none; background:transparent; color:var(--ink-mist);
+    border-radius:9px; font-weight:600; font-size:14px; transition:.2s;
+  }
+  .tabs button.active{background:var(--blue-600); color:#fff;}
+
+  .field{margin-bottom:20px;}
+  .field label{display:block; font-size:13.5px; font-weight:600; color:var(--ink-fog); margin-bottom:8px;}
+  .input-wrap{position:relative;}
+  .input-wrap svg.leading{
+    position:absolute; left:15px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:var(--ink-mist);
+  }
+  .field input{
+    width:100%; padding:14px 16px 14px 44px; border-radius:11px; font-size:14.5px;
+    background:var(--slate-card); border:1.5px solid rgba(255,255,255,.09); color:#fff;
+    transition:.2s;
+  }
+  .field input:focus{outline:none; border-color:var(--blue-500); background:#1b2338;}
+  .field input::placeholder{color:#5c6883;}
+  .toggle-eye{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    background:none; border:none; color:var(--ink-mist); display:flex; padding:4px;
+  }
+  .toggle-eye svg{width:18px; height:18px;}
+
+  .row-between{display:flex; align-items:center; justify-content:space-between; margin-bottom:26px; font-size:13.5px;}
+  .remember{display:flex; align-items:center; gap:9px; color:var(--ink-fog);}
+  .remember input{width:17px; height:17px; accent-color:var(--blue-600);}
+  .row-between a{color:#6fc4f0; font-weight:600;}
+  .row-between a:hover{text-decoration:underline;}
+
+  .divider{display:flex; align-items:center; gap:14px; margin:28px 0; color:var(--ink-mist); font-size:13px;}
+  .divider::before, .divider::after{content:''; flex:1; height:1px; background:rgba(255,255,255,.1);}
+
+  .signup-line{text-align:center; font-size:14.5px; color:var(--ink-fog);}
+  .signup-line a{color:#6fc4f0; font-weight:700;}
+  .signup-line a:hover{text-decoration:underline;}
+
+  .security-note{
+    display:flex; gap:12px; align-items:flex-start; margin-top:30px;
+    background:rgba(31,191,143,.08); border:1px solid rgba(31,191,143,.2);
+    border-radius:12px; padding:16px 18px; font-size:13px; color:var(--ink-fog);
+  }
+  .security-note svg{width:20px; height:20px; color:var(--green-500); flex-shrink:0; margin-top:1px;}
+
+  .alert{
+    display:flex; gap:10px; align-items:flex-start; background:rgba(239,68,68,.1);
+    border:1px solid rgba(239,68,68,.3); color:#fca5a5; padding:14px 16px;
+    border-radius:11px; font-size:13.5px; margin-bottom:22px;
+  }
+  .alert svg{width:18px; height:18px; flex-shrink:0; margin-top:1px;}
+  .hidden{display:none !important;}
+
+  /* footer mini */
+  footer{background:var(--navy-950); padding:34px 0; border-top:1px solid rgba(255,255,255,.06);}
+  .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .foot-row .copy{font-size:13px; color:var(--ink-mist);}
+  .badges{display:flex; gap:18px; font-size:12.5px; color:var(--ink-mist);}
+  .badges span{display:inline-flex; align-items:center; gap:6px;}
+  .badges svg{width:15px; height:15px;}
+  .legal-links{display:flex; gap:20px;}
+  .legal-links a{font-size:12.5px; color:var(--ink-mist);}
+  .legal-links a:hover{color:#fff;}
+
+  @media (max-width:980px){
+    .nav-links, .nav-actions{display:none;}
+    .hamburger{display:flex;}
+    .auth-shell{grid-template-columns:1fr;}
+    .auth-side{display:none;}
+    .auth-form-col{padding:48px 24px;}
+  }
+  @media (max-width:480px){
+    .wrap{padding:0 20px;}
+    .auth-card h2{font-size:24px;}
+    .row-between{flex-direction:column; align-items:flex-start; gap:12px;}
+    .foot-row{flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="wrap nav">
+    <a href="{% url 'bank:index' %}" class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg>
+      </div>
+      <div class="brand-text">
+        <div class="t1">City Prime</div>
+        <div class="t2">Bank</div>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="{% url 'bank:index' %}">Home</a>
+      <a href="{% url 'bank:index' %}#services">Services</a>
+      <a href="{% url 'bank:index' %}#rates">Rates</a>
+      <a href="{% url 'bank:index' %}#about">About</a>
+      <a href="{% url 'bank:index' %}#contact">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="{% url 'bank:login' %}" class="btn btn-outline btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        Login
+      </a>
+      <a href="{% url 'bank:register' %}" class="btn btn-primary btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+        Register
+      </a>
+    </div>
+
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<aside class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-top">
+    <div class="brand">
+      <div class="brand-icon" style="width:36px;height:36px;">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M3 21h4V10H3v11zm7 0h4V3h-4v18zm7 0h4v-7h-4v7z" fill="#fff"/></svg>
+      </div>
+      <div class="brand-text"><div class="t1" style="font-size:16px;">City Prime</div></div>
+    </div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <a class="drawer-link" href="{% url 'bank:index' %}">Home</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#services">Services</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#rates">Rates</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#about">About</a>
+  <a class="drawer-link" href="{% url 'bank:index' %}#contact">Contact</a>
+  <div class="drawer-actions">
+    <a href="{% url 'bank:login' %}" class="btn btn-outline btn-block">Login</a>
+    <a href="{% url 'bank:register' %}" class="btn btn-primary btn-block">Register</a>
+  </div>
+</aside>
+
+<!-- ===================== MAIN ===================== -->
+<main>
+  <div class="auth-shell">
+    <div class="auth-side">
+      <div class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>
+        Secure Sign On
+      </div>
+      <h1>Welcome back to your digital banking partner.</h1>
+      <p class="lead">Access your accounts, pay bills, move money, and manage your finances — anytime, anywhere.</p>
+
+      <div class="side-feature">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 16h4"/></svg></div>
+        <div><h4>256-bit encryption</h4><p>Bank-grade security on every session</p></div>
+      </div>
+      <div class="side-feature">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 3a2 2 0 0 1-.4 2.1L8.1 10a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c1 .4 2 .7 3 .8a2 2 0 0 1 1.7 2z"/></svg></div>
+        <div><h4>24/7 support</h4><p>Real help whenever you need it</p></div>
+      </div>
+      <div class="side-feature">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/></svg></div>
+        <div><h4>FDIC insured</h4><p>Your deposits are protected up to $250,000</p></div>
+      </div>
+    </div>
+
+    <div class="auth-form-col">
+      <div class="auth-card">
+        <div class="top-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 21h18M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg>
+        </div>
+        <h2>Sign On</h2>
+        <p class="sub">Enter your credentials to access your accounts.</p>
+
+        <div class="tabs">
+          <button type="button" class="active" data-tab="personal">Personal</button>
+          <button type="button" data-tab="business">Business</button>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert" style="position:static; background:rgba(31,191,143,.12); border:1px solid rgba(31,191,143,.4); color:#1fbf8f; margin-bottom:16px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <div id="loginAlert" class="alert {% if not error %}hidden{% endif %}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <span>{{ error|default:"We couldn't verify those details. Check your Online ID and password, then try again." }}</span>
+        </div>
+
+        <form id="loginForm" method="post" action="{% url 'bank:login' %}" novalidate>
+          {% csrf_token %}
+          <div class="field">
+            <label for="onlineId">Online ID</label>
+            <div class="input-wrap">
+              <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
+              <input type="text" id="onlineId" name="online_id" placeholder="Enter your Online ID" autocomplete="username" value="{{ form.online_id.value|default:'' }}" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <svg class="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required style="padding-right:44px;">
+              <button type="button" class="toggle-eye" id="togglePw" aria-label="Show password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-between">
+            <label class="remember"><input type="checkbox" id="rememberMe"> Remember my Online ID</label>
+            <a href="#forgot">Forgot ID or password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Sign On
+          </button>
+        </form>
+
+        <div class="divider">or</div>
+        <p class="signup-line">New to City Prime? <a href="{% url 'bank:register' %}">Open an account</a></p>
+
+        <div class="security-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>We'll never ask for your password by phone, email, or text. Protect your account and never share your sign-on details.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap foot-row">
+    <div class="copy">© 2025 City Prime Bank. All rights reserved. Member FDIC. Equal Housing Lender.</div>
+    <div class="badges">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#1fbf8f" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>FDIC Insured</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="#8b96ab" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>256-bit SSL</span>
+    </div>
+    <div class="legal-links">
+      <a href="#">Privacy</a>
+      <a href="#">Security</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile drawer
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const drawer = document.getElementById('mobileDrawer');
+  const scrim = document.getElementById('scrim');
+  const drawerClose = document.getElementById('drawerClose');
+  function openDrawer(){ drawer.classList.add('open'); scrim.classList.add('show'); hamburgerBtn.classList.add('active'); document.body.style.overflow='hidden'; }
+  function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); hamburgerBtn.classList.remove('active'); document.body.style.overflow=''; }
+  hamburgerBtn.addEventListener('click', () => drawer.classList.contains('open') ? closeDrawer() : openDrawer());
+  drawerClose.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+
+  // Tabs
+  document.querySelectorAll('.tabs button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Password toggle
+  const pwInput = document.getElementById('password');
+  const toggleBtn = document.getElementById('togglePw');
+  toggleBtn.addEventListener('click', ()=>{
+    const isPw = pwInput.type === 'password';
+    pwInput.type = isPw ? 'text' : 'password';
+  });
+
+  // Real submit — posts to Django, which authenticates the user
+  const alertBox = document.getElementById('loginAlert');
+  if (!alertBox.classList.contains('hidden')) {
+    alertBox.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+</script>
+</body>
+</html>
