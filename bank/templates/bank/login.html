@@ -342,7 +342,12 @@
 
         <div id="loginAlert" class="alert {% if not error %}hidden{% endif %}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-          <span>{{ error|default:"We couldn't verify those details. Check your Online ID and password, then try again." }}</span>
+          <span>
+            {{ error|default:"We couldn't verify those details. Check your Online ID and password, then try again." }}
+            {% if account_locked %}
+              <a href="{% url 'bank:help_center' %}" style="text-decoration: underline; font-weight: 600;">Contact support</a>
+            {% endif %}
+          </span>
         </div>
 
         <form id="loginForm" method="post" action="{% url 'bank:login' %}" novalidate>
