@@ -53,10 +53,11 @@ class UserAdmin(BaseUserAdmin):
     def account_status(self, obj):
         if obj.is_active:
             return format_html(
-                '<span style="color: #1a7f37;">● Active</span>'
+                '<span style="color: #1a7f37;">{}</span>', "● Active"
             )
         return format_html(
-            '<span style="color: #b91c1c; font-weight: 600;">🔒 Locked</span>'
+            '<span style="color: #b91c1c; font-weight: 600;">{}</span>',
+            "🔒 Locked",
         )
 
     account_status.short_description = "Status"
